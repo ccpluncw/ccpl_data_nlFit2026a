@@ -1,0 +1,2407 @@
+---
+title: "Visual Models MS Analyses"
+author: "Marta Mielicki"
+date: "3/14/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r Packages, include=FALSE}
+
+library(readxl)
+library(dplyr)
+library(tidyverse) 
+library(car)
+library(lme4)
+library(lmerTest)
+library(lmSupport)
+library(readr)
+library(ggplot2)
+library(broom)
+library(psych)
+library(lsmeans)
+library(lmtest)
+library(foreign)
+library(stargazer)
+library(apaTables)
+library(lm.beta)
+library(effsize)
+library(ggpubr)
+library(effects)
+library(sensemakr)
+library(effectsize)
+library(effects)
+```
+
+```{r Data import, include=FALSE}
+
+d1 <- read_excel("VM data FINAL.xlsx", na="NA") ## 270 observations 
+stratcodes <- read_excel("VM AllCodesFINAL.xlsx")
+
+```
+
+```{r Filters/data cleaning, include=FALSE}
+
+## Equivalence correct items
+d1$equiv1_c[d1$Q386==1] <-1
+d1$equiv1_c[d1$Q386==2] <-0
+
+d1$equiv2_c[d1$Q387==1] <-1
+d1$equiv2_c[d1$Q387==2] <-0
+
+d1$equiv3_c[d1$Q388==1] <-1
+d1$equiv3_c[d1$Q388==2] <-0
+
+d1$equiv4_c[d1$Q389==1] <-0
+d1$equiv4_c[d1$Q389==2] <-1
+
+d1$equiv5_c[d1$Q390==1] <-0
+d1$equiv5_c[d1$Q390==2] <-1
+
+d1$equiv6_c[d1$Q390==1] <-0
+d1$equiv6_c[d1$Q390==2] <-1
+
+d1 <- d1 %>% mutate(equiv_left = 
+                      case_when(
+                        apply(dplyr::select(., equiv1_c:equiv3_c),1,sum, na.rm=TRUE)==3 &
+                          apply(dplyr::select(., equiv4_c:equiv6_c),1,sum, na.rm=TRUE) ==0 ~ 1,
+                        TRUE ~ 0), 
+                    equiv_right = 
+                      case_when(
+                        apply(dplyr::select(., equiv1_c:equiv3_c),1,sum, na.rm=TRUE)==0 &
+                          apply(dplyr::select(., equiv4_c:equiv6_c),1,sum, na.rm=TRUE) ==3 ~ 1,
+                        TRUE ~ 0))
+
+d1 <- d1 %>% mutate(equiv_filter =
+                      case_when(
+                        equiv_left ==1 | equiv_right ==1 ~ 1,
+                        TRUE ~ 0))
+
+table(d1$equiv_filter) # 13 people were poor responders
+
+
+## Number Line Estimation 
+
+## no deviations on the NLs
+
+# small range
+# Standard deviations for each ID 
+d1 <- d1 %>% mutate(sm_wnNLE_sd = apply(dplyr::select(., Q429_1:Q438_1), 1, sd, na.rm=TRUE))
+d1 <- d1 %>% mutate(lg_wnNLE_sd = apply(dplyr::select(., Lg_WNL_1:Lg_WNL_22), 1, sd, na.rm=TRUE))
+
+d1 <- d1 %>% mutate(lg_wnNLE_sd = lg_wnNLE_sd/1000000000)
+d1 <- d1 %>% mutate(sm_wnNLE_sd = sm_wnNLE_sd/100)
+
+
+
+## the lower and upper 5% of the line for each range
+
+d1$	nl_s1	[d1$	Q429_1	<5]	<-1
+d1$	nl_s2	[d1$	Q430_1	<5]	<-1
+d1$	nl_s3	[d1$	Q431_1	<5]	<-1
+d1$	nl_s4	[d1$	Q432_1	<5]	<-1
+d1$	nl_s5	[d1$	Q433_1	<5]	<-1
+d1$	nl_s6	[d1$	Q434_1	<5]	<-1
+d1$	nl_s7	[d1$	Q435_1	<5]	<-1
+d1$	nl_s8	[d1$	Q436_1	<5]	<-1
+d1$	nl_s9	[d1$	Q437_1	<5]	<-1
+d1$	nl_s10	[d1$	Q438_1	<5]	<-1
+
+d1$	nl_s11	[d1$	Lg_WNL_1	<50000000]	<-1
+d1$	nl_s12	[d1$	Lg_WNL_2	<50000000]	<-1
+d1$	nl_s13	[d1$	Lg_WNL_3	<50000000]	<-1
+d1$	nl_s14	[d1$	Lg_WNL_4	<50000000]	<-1
+d1$	nl_s15	[d1$	Lg_WNL_5	<50000000]	<-1
+d1$	nl_s16	[d1$	Lg_WNL_6	<50000000]	<-1
+d1$	nl_s17	[d1$	Lg_WNL_7	<50000000]	<-1
+d1$	nl_s18	[d1$	Lg_WNL_8	<50000000]	<-1
+d1$	nl_s19	[d1$	Lg_WNL_9	<50000000]	<-1
+d1$	nl_s20	[d1$	Lg_WNL_10	<50000000]	<-1
+d1$	nl_s21	[d1$	Lg_WNL_11	<50000000]	<-1
+d1$	nl_s22	[d1$	Lg_WNL_12	<50000000]	<-1
+d1$	nl_s23	[d1$	Lg_WNL_13	<50000000]	<-1
+d1$	nl_s24	[d1$	Lg_WNL_14	<50000000]	<-1
+d1$	nl_s25	[d1$	Lg_WNL_15	<50000000]	<-1
+d1$	nl_s26	[d1$	Lg_WNL_16	<50000000]	<-1
+d1$	nl_s27	[d1$	Lg_WNL_17	<50000000]	<-1
+d1$	nl_s28	[d1$	Lg_WNL_18	<50000000]	<-1
+d1$	nl_s29	[d1$	Lg_WNL_19	<50000000]	<-1
+d1$	nl_s30	[d1$	Lg_WNL_20	<50000000]	<-1
+d1$	nl_s31	[d1$	Lg_WNL_21	<50000000]	<-1
+d1$	nl_s32	[d1$	Lg_WNL_22	<50000000]	<-1
+
+
+d1$	nl_l1	[d1$	Q429_1	>95]	<-1
+d1$	nl_l2	[d1$	Q430_1	>95]	<-1
+d1$	nl_l3	[d1$	Q431_1	>95]	<-1
+d1$	nl_l4	[d1$	Q432_1	>95]	<-1
+d1$	nl_l5	[d1$	Q433_1	>95]	<-1
+d1$	nl_l6	[d1$	Q434_1	>95]	<-1
+d1$	nl_l7	[d1$	Q435_1	>95]	<-1
+d1$	nl_l8	[d1$	Q436_1	>95]	<-1
+d1$	nl_l9	[d1$	Q437_1	>95]	<-1
+d1$	nl_l10	[d1$	Q438_1	>95]	<-1
+
+d1$	nl_l11	[d1$	Lg_WNL_1	> 950000000]	<-1
+d1$	nl_l12	[d1$	Lg_WNL_2	> 950000000]	<-1
+d1$	nl_l13	[d1$	Lg_WNL_3	> 950000000]	<-1
+d1$	nl_l14	[d1$	Lg_WNL_4	> 950000000]	<-1
+d1$	nl_l15	[d1$	Lg_WNL_5	> 950000000]	<-1
+d1$	nl_l16	[d1$	Lg_WNL_6	> 950000000]	<-1
+d1$	nl_l17	[d1$	Lg_WNL_7	> 950000000]	<-1
+d1$	nl_l18	[d1$	Lg_WNL_8	> 950000000]	<-1
+d1$	nl_l19	[d1$	Lg_WNL_9	> 950000000]	<-1
+d1$	nl_l20	[d1$	Lg_WNL_10	> 950000000]	<-1
+d1$	nl_l21	[d1$	Lg_WNL_11	> 950000000]	<-1
+d1$	nl_l22	[d1$	Lg_WNL_12	> 950000000]	<-1
+d1$	nl_l23	[d1$	Lg_WNL_13	> 950000000]	<-1
+d1$	nl_l24	[d1$	Lg_WNL_14	> 950000000]	<-1
+d1$	nl_l25	[d1$	Lg_WNL_15	> 950000000]	<-1
+d1$	nl_l26	[d1$	Lg_WNL_16	> 950000000]	<-1
+d1$	nl_l27	[d1$	Lg_WNL_17	> 950000000]	<-1
+d1$	nl_l28	[d1$	Lg_WNL_18	> 950000000]	<-1
+d1$	nl_l29	[d1$	Lg_WNL_19	> 950000000]	<-1
+d1$	nl_l30	[d1$	Lg_WNL_20	> 950000000]	<-1
+d1$	nl_l31	[d1$	Lg_WNL_21	> 950000000]	<-1
+d1$	nl_l32	[d1$	Lg_WNL_22	> 950000000]	<-1
+
+
+d1<- d1 %>% mutate(nl_sm_NLE_left = apply(dplyr::select(., nl_s1:nl_s10), 1, sum, na.rm=TRUE))
+d1<- d1 %>% mutate(nl_sm_NLE_right = apply(dplyr::select(., nl_l1:nl_l10), 1, sum, na.rm=TRUE))
+
+d1<- d1 %>% mutate(nl_lg_NLE_left = apply(dplyr::select(., nl_s11:nl_s32), 1, sum, na.rm=TRUE))
+d1<- d1 %>% mutate(nl_lg_NLE_right = apply(dplyr::select(., nl_l11:nl_l32), 1, sum, na.rm=TRUE))
+
+d1<- d1 %>% mutate(nl_sm_endpoints = apply(dplyr::select(., c("nl_sm_NLE_left","nl_sm_NLE_right")), 1, sum, na.rm=TRUE))
+d1<- d1 %>% mutate(nl_lg_endpoints = apply(dplyr::select(., c("nl_lg_NLE_left","nl_lg_NLE_right")), 1, sum, na.rm=TRUE))
+
+psych::describe(d1$nl_sm_endpoints) # M = 3.47; min = 0; max = 5 
+psych::describe(d1$nl_lg_endpoints) # M = 3.31; min = 0; max = 12
+
+d1 <- d1 %>% mutate(nl_sm_endpoints_pro = nl_sm_endpoints/10,
+                    nl_lg_endpoints_pro = nl_lg_endpoints/22,
+                    nlfilter = case_when(
+                      lg_wnNLE_sd < .1 ~ 1,
+                      nl_lg_endpoints_pro > 0.8 ~ 1,
+                      sm_wnNLE_sd < .1 ~ 1, ## 
+                      nl_sm_endpoints_pro > 0.8 ~ 1,
+                      T ~ 0))
+
+table(d1$nlfilter) # 7 people were poor NL responders 
+
+## RT 
+
+class(d1$`Duration (in seconds)`)
+d1<- d1 %>% mutate(rt_min = `Duration (in seconds)` / 60)
+psych::describe(d1$rt_min)
+# vars   n   mean     sd median trimmed   mad  min  max   range skew kurtosis   se
+# X1    1 270 175.57 609.59  52.15   56.79 23.57 0.12 5755 5754.88 6.19    42.29 37.1
+
+# median time = 52 minutes with some extreme outliers
+x <- d1 %>% dplyr::select(rt_min) %>% filter(rt_min > 5 & rt_min < 120)
+psych::describe(d1$rt_min) # mean = 175; median = 52.15; sd = 609. 
+
+## EQ and NL Filters 
+# equiv_filter
+# nlfilter
+class(d1$equiv_filter)
+class(d1$nlfilter)
+
+d1 <- d1 %>% mutate(filter_sum =
+                      apply(dplyr::select(., "equiv_filter", "nlfilter"),1, sum, na.rm=TRUE))
+
+table(d1$filter_sum) #18 people excluded for EQ or NL performance
+
+## Attention Check 
+# Q559_15 -- answer is often (option 3)
+
+
+table(d1$Q559_15) ## 14 who missed attention check 
+
+table(d1$Q439_7) #att check; want option 2 # 28 people missed the second att check
+
+d1<- d1 %>% mutate(att_chk = 
+                     case_when(Q559_15 != "3" & Q439_7 != "2" ~ 1,
+                               T ~ 0))
+table(d1$att_chk) # 9 people missed both attention checks
+
+d1<- d1 %>% mutate(filters = 
+                     case_when(Status!=0 ~ 1,
+                               is.na(Consent) ~ 2,
+                               rt_min < 15 ~3, 
+                               equiv_filter == 1 ~4,
+                               nlfilter ==1 ~ 5,
+                               att_chk == 1 ~6,
+                               Progress < 70 ~ 7,
+                               TRUE ~0
+                     ))
+
+table(d1$filters) # final sample with all exclusions: N = 237
+#   0   3   4   5   6  7
+# 237   6  13   5   6  3 
+
+# Recoding
+d1 <-d1 %>% mutate(male = case_when(Gender==1 ~ 1,
+                                    T~0))
+d1$male <- factor(d1$male)
+
+d1$cond <- factor(d1$cond)
+
+d1 <- d1 %>% mutate(cond1 = cond,
+                    Cond_v = as.factor(case_when(cond == "0a" | cond == "0b" ~ 0,
+                                                 cond == "1a" | cond == "1b" ~ 1,
+                                                 cond == "2a" | cond== "2b" ~ 2,
+                                                 cond == "3a" | cond== "3b" ~ 3)))
+
+d1$Cond_v <- factor(d1$Cond_v,
+                    levels = c("0", "1", "2", "3"),
+                    labels = c("No Model", "NL", "RL", "IA"))
+
+d1 <-d1 %>% mutate(White = case_when(Race==1 ~ 1,
+                                     T~0))
+
+d1$nummath<-gsub(",","",d1$MathCourse)
+d1$nummath<-nchar(d1$nummath)
+
+d1 <- d1 %>% dplyr::rename(calcuse = Q441)
+d1$calcuse<-as.factor(d1$calcuse)
+
+d2 <- d1 %>% filter(filters==0)
+```
+
+```{r Covariates, include=FALSE}
+
+# Equivalence
+    d1<- d1 %>% mutate(equiv_na = 
+                         apply(dplyr::select(., Q386:Q390), 
+                               1, 
+                               function(x) sum(is.na(x)))) 
+    
+    d1<- d1 %>% mutate(equiv_perc = case_when(equiv_na <3~
+                                                (apply(dplyr::select(., equiv1_c:equiv6_c), 
+                                                       1, mean, na.rm=TRUE))))
+
+# PAE 
+
+# small range 
+    d1$sm_PAE_1	=	(abs(2	-	d1$Q429_1	))/100
+    d1$sm_PAE_2	=	(abs(3	-	d1$Q430_1	))/100
+    d1$sm_PAE_3	=	(abs(4	-	d1$Q431_1	))/100
+    d1$sm_PAE_4	=	(abs(6	-	d1$Q432_1	))/100
+    d1$sm_PAE_5	=	(abs(18	-	d1$Q433_1	))/100
+    d1$sm_PAE_6	=	(abs(25	-	d1$Q434_1	))/100
+    d1$sm_PAE_7	=	(abs(42	-	d1$Q435_1	))/100
+    d1$sm_PAE_8	=	(abs(67	-	d1$Q436_1	))/100
+    d1$sm_PAE_9	=	(abs(71	-	d1$Q437_1	))/100
+    d1$sm_PAE_10	=	(abs(86	-	d1$Q438_1	))/100
+
+# Large range 
+
+    d1$WN1PAE = (abs(150000000 - d1$Lg_WNL_1))/1000000000
+    d1$WN2PAE = (abs(722000000 - d1$Lg_WNL_2))/1000000000
+    d1$WN3PAE = (abs(2000000 - d1$Lg_WNL_3))/1000000000
+    d1$WN4PAE = (abs(56000000 - d1$Lg_WNL_4))/1000000000
+    d1$WN5PAE = (abs(606000000 - d1$Lg_WNL_5))/1000000000
+    d1$WN6PAE = (abs(738000000 - d1$Lg_WNL_6))/1000000000
+    d1$WN7PAE = (abs(147000000 - d1$Lg_WNL_7))/1000000000
+    d1$WN8PAE = (abs(163000000 - d1$Lg_WNL_8))/1000000000
+    d1$WN9PAE = (abs(818000000 - d1$Lg_WNL_9))/1000000000
+    d1$WN10PAE = (abs(100000000 - d1$Lg_WNL_10))/1000000000
+    d1$WN11PAE = (abs(725000000 - d1$Lg_WNL_11))/1000000000
+    d1$WN12PAE = (abs(486000000 - d1$Lg_WNL_12))/1000000000
+    d1$WN13PAE = (abs(122000000 - d1$Lg_WNL_13))/1000000000
+    d1$WN14PAE = (abs(18000000 - d1$Lg_WNL_14))/1000000000
+    d1$WN15PAE = (abs(366000000 - d1$Lg_WNL_15))/1000000000
+    d1$WN16PAE = (abs(34000000 - d1$Lg_WNL_16))/1000000000
+    d1$WN17PAE = (abs(5000000 - d1$Lg_WNL_17))/1000000000
+    d1$WN18PAE = (abs(246000000 - d1$Lg_WNL_18))/1000000000
+    d1$WN19PAE = (abs(179000000 - d1$Lg_WNL_19))/1000000000
+    d1$WN20PAE = (abs(754000000 - d1$Lg_WNL_20))/1000000000
+    d1$WN21PAE = (abs(938000000 - d1$Lg_WNL_21))/1000000000
+    d1$WN22PAE = (abs(78000000 - d1$Lg_WNL_22))/1000000000
+
+
+    d1<- d1 %>% mutate(PAE_lg = 
+                         apply(dplyr::select(., WN1PAE:WN22PAE), 1, mean, na.rm=T),
+                       PAE_sm =
+                         apply(dplyr::select(., sm_PAE_1:sm_PAE_10), 1, mean, na.rm=T))
+    
+    d1 <- d1 %>% mutate(PAE_agg = 
+                          apply(dplyr::select(., "PAE_lg", "PAE_sm"), 1, mean, na.rm=T))
+
+# Math Anxiety 
+# Q155_1 --- General
+# Q157_1 --- WNs
+# Q161_1  --- Percentages
+# Q361_1 --- WN Frequencies
+# Q159_1  --- FRs
+
+# Computed only for participants who have fewer than 3 missing values for both MA and MAQ
+    d1 <- d1 %>% dplyr::rename(ma_gen = Q155_1,
+                        ma_wn = Q157_1,
+                        ma_per = Q161_1,
+                        ma_freq = Q361_1,
+                        ma_frac = Q159_1)
+    
+    d1 <- d1 %>% mutate(ma_na = 
+                          apply(dplyr::select(., "ma_gen", "ma_wn", "ma_per", "ma_freq",
+                                              "ma_frac"),1, function(x) sum(is.na(x))))
+    d1 <- d1 %>% mutate(ma_agg = case_when(ma_na <3~
+                                           apply(dplyr::select(., "ma_gen", "ma_wn", "ma_per",
+                                                               "ma_freq", "ma_frac"),1, mean, 
+                                                 na.rm=T)))
+
+# Subjective Graph Literacy ((sgl_sum; computed for Ss with less than 4 missing values on the 5 item scale)
+    
+    d1 <- d1 %>% dplyr::rename(sgl_1 = Q461_1,
+                        sgl_2 = Q461_2,
+                        sgl_3 = Q461_3,
+                        sgl_4 = Q461_4,
+                        sgl_5 = Q461_5)
+    
+    d1 <- d1 %>% mutate(sgl_na = 
+                          apply(dplyr::select(., sgl_1:sgl_5), 1, function(x) sum(is.na(x))),
+                        sgl_sum = case_when(sgl_na <4 ~apply(dplyr::select(., sgl_1:sgl_5), 1,
+                                                             sum, na.rm=T))) 
+
+# Objective graph literacy measures
+
+    d1 <- d1 %>% mutate(ogl_1 = case_when(Q462 == "25" ~ 1,
+                                          Q462 == "0.25" ~ 1,
+                                          Q462 == ".25" ~ 1,
+                                          Q462 == "25%" ~ 1,
+                                          T~0),
+                        ogl_2 = case_when(Q463 == "20" ~ 1,
+                                          Q463 == "twenty" ~ 1,
+                                          Q463 == "20 more men" ~ 1,
+                                          T ~ 0),
+                        ogl_3 = case_when(Q464 == "3" ~ 1,
+                                          T ~ 0), ## 3 = they are equal; 4 = can't say 
+                        ogl_4 = case_when(Q465 == "2" ~ 1,
+                                          T ~ 0))
+    d1<- d1 %>% mutate(ogl_sum = apply(dplyr::select(., ogl_1:ogl_4), 1, sum, na.rm=T))
+
+# MAQ (Q78_1:Q84_7)
+
+    d1<-d1 %>% mutate(maq_na = 
+                        apply(dplyr::select(., Q78_1:Q84_7), 1, function(x) sum(is.na(x))),
+                      maq_mean = case_when(maq_na < 14 ~
+                                             apply(dplyr::select(., Q78_1:Q84_7), 1, 
+                                                   mean,na.rm=T)))
+    
+    d1<-d1 %>% mutate(maq_good_like = case_when(maq_na < 14 ~
+                                                  apply(dplyr::select(., Q78_1:Q80_7), 1, 
+                                                        mean, na.rm=T)))
+
+# MAQ fractions (Q78_3, Q78_6, Q80_3, Q80_6,Q82_3, Q82_6, Q84_3, Q84_6)
+    
+ d1<-d1 %>% mutate(maq_fr = case_when(maq_na < 14 ~
+                                                  apply(dplyr::select(., Q78_3, Q78_6, Q80_3, Q80_6,Q82_3, Q82_6, Q84_3, Q84_6), 1, 
+                                                        mean, na.rm=T)))
+    
+# Tests of Relational Reasoning (1 = a; 2 =b... 4=d)
+
+    d1 <- d1 %>% mutate(torr_1 = case_when(Q466 == "1" ~ 1,
+                                           T ~ 0),
+                        torr_2 = case_when(Q467 == "4" ~ 1,
+                                           T ~ 0),
+                        torr_3 = case_when(Q468 == "4" ~ 1,
+                                           T ~ 0),
+                        torr_4 = case_when(Q469 == "3" ~ 1,
+                                           T ~ 0))
+    
+    d1 <- d1 %>% mutate(torr_sum = 
+                          apply(dplyr::select(., torr_1:torr_4), 1, sum, na.rm=T))
+
+# Non-Symbolic Ratio (SC0, 1 = left,2 = right)
+
+    d1$nsc_1 <- car::recode(d1$Q489, '1 = 0; 2 = 1', as.factor=F) # R
+    d1$nsc_2 <- car::recode(d1$Q490, '1 = 1; 2 = 0', as.factor=F) # L
+    d1$nsc_3 <- car::recode(d1$Q491, '1 = 1; 2 = 0', as.factor=F) # L 
+    d1$nsc_4 <- car::recode(d1$Q493, '1 = 0; 2 = 1', as.factor=F) # R
+    d1$nsc_5 <- car::recode(d1$Q494, '1 = 1; 2 = 0', as.factor=F) # L
+    d1$nsc_6 <- car::recode(d1$Q495, '1 = 0; 2 = 1', as.factor=F) # R
+    d1$nsc_7 <- car::recode(d1$Q496, '1 = 1; 2 = 0', as.factor=F) # L
+    d1$nsc_8 <- car::recode(d1$Q497, '1 = 0; 2 = 1', as.factor=F) # R
+    d1$nsc_9 <- car::recode(d1$Q498, '1 = 0; 2 = 1', as.factor=F) # R
+    d1$nsc_10 <- car::recode(d1$Q499, '1 = 1; 2 = 0', as.factor=F) # L
+    d1$nsc_11 <- car::recode(d1$Q500, '1 = 1; 2 = 0', as.factor=F) # L
+    d1$nsc_12 <- car::recode(d1$Q501, '1 = 0; 2 = 1', as.factor=F) # R
+    d1$nsc_13 <- car::recode(d1$Q502, '1 = 1; 2 = 0', as.factor=F) # L
+    d1$nsc_14 <- car::recode(d1$Q503, '1 = 0; 2 = 1', as.factor=F) # R
+    d1$nsc_15 <- car::recode(d1$Q504, '1 = 1; 2 = 0', as.factor=F) # L
+    d1$nsc_16 <- car::recode(d1$Q505, '1 = 0; 2 = 1', as.factor=F) # R
+    d1$nsc_17 <- car::recode(d1$Q506, '1 = 1; 2 = 0', as.factor=F) # L
+    d1$nsc_18 <- car::recode(d1$Q507, '1 = 0; 2 = 1', as.factor=F) # R
+    
+    d1 <- d1 %>% mutate(NS_ratio = 
+                          apply(dplyr::select(., nsc_1:nsc_18),1,mean, na.rm=T))
+
+# Risk Perceptions for self and others 
+
+    d1$riskself1r <- car::recode(d1$riskself1, '1=1; 2=2; 3=3; 4=4; 5=5; 9=NA; 8=NA')
+    d1$riskself2r <- car::recode(d1$riskself2, '1=1; 2=2; 3=3; 4=4; 5=5; 6=NA; 7=NA')
+    d1$riskself3r <- car::recode(d1$riskself3, '1=1; 2=2; 3=3; 4=4; 5=5; 9=NA; 8=NA')
+    d1$riskself4r <- car::recode(d1$riskself4, '1=1; 2=2; 3=3; 4=4; 5=5; 6=NA; 7=NA')
+    
+    d1$riskother1r <- car::recode(d1$riskother1, '1=1; 2=2; 3=3; 4=4; 5=5; 9=NA; 8=NA')
+    d1$riskother2r <- car::recode(d1$riskother2, '1=1; 2=2; 3=3; 4=4; 5=5; 9=NA; 8=NA')
+    d1$riskother3r <- car::recode(d1$riskother3, '1=1; 2=2; 3=3; 4=4; 5=5; 9=NA; 8=NA')
+    d1$riskother4r <- car::recode(d1$riskother4, '1=1; 2=2; 3=3; 4=4; 5=5; 9=NA; 8=NA')
+    
+    d1 <- d1 %>% mutate(risk_self_na = 
+                          apply(dplyr::select(., "riskself1r", "riskself2r", 
+                                       "riskself3r","riskself4r"),1,function(x) 
+                                         sum(is.na(x)))) 
+  
+      d1 <- d1 %>% mutate(risk_other_na = 
+                          apply(dplyr::select(., "riskother1r", "riskother2r", 
+                                       "riskother3r","riskother4r"),1,function(x) 
+                                         sum(is.na(x))))
+    
+    d1 <- d1 %>% mutate(risk_na = 
+                          apply(dplyr::select(., "riskself1r", "riskself2r", "riskself3r", 
+                                              "riskself4r","riskother1r", "riskother2r", 
+                                              "riskother3r", "riskother4r"),1,function(x) 
+                                                sum(is.na(x))))
+    
+    d1 <- d1 %>% mutate(risk_self_avg = case_when(risk_self_na <2 ~ apply(
+      dplyr::select(., "riskself1r","riskself2r", "riskself3r","riskself4r"),1,mean,na.rm=T)))
+    
+    d1 <- d1 %>% mutate(risk_other_avg = case_when(risk_other_na <2 ~ apply(
+      dplyr::select(.,"riskother1r","riskother2r","riskother3r","riskother4r"),1,mean, na.rm=T)))
+
+# Worry for self and others 
+
+    d1 <- d1 %>% mutate(worry_na = apply(
+      dplyr::select(., worryself1, worryself2,worryother1, worryother2),1, function(x)sum(is.na(x))))
+    
+    d1 <- d1 %>% mutate(worry_self = 
+                          apply(dplyr::select(., "worryself1", "worryself2"),1,
+                                mean, na.rm=T))
+    d1 <- d1 %>% mutate(worry_other = 
+                          apply(dplyr::select(., "worryother1", "worryother2"),1,
+                                mean, na.rm=T))
+
+# Severity (severity_1 through severity_3)
+
+    d1 <- d1 %>% mutate(severity_na = 
+                          apply(dplyr::select(., severity_1, severity_2, 
+                                              severity_3),1,
+                                function(x) sum(is.na(x))))
+    
+    d1 <- d1 %>% mutate(severity =
+                          case_when(severity_na<1~
+                                      apply(dplyr::select(., "severity_1", "severity_2", 
+                                                   "severity_3"),1,mean, na.rm=T)))
+
+# Behavioral Intentions (Q439_1 to Q439_10, Q439_9 was attention check)
+
+    d1 <- d1 %>% mutate(healthbeh_na = 
+                          apply(dplyr::select(., Q439_1:Q439_10), 
+                                1, 
+                                function(x) sum(is.na(x)))) 
+    
+    d1 <- d1 %>% mutate(healthbeh_mean= 
+                          apply(dplyr::select(., "Q439_1","Q439_2","Q439_3", "Q439_4", 
+                                              "Q439_5","Q439_6", "Q439_7", "Q439_8", 
+                                              "Q439_10"), 1,mean, na.omit=T))
+   
+#### Trait Anxiety
+
+## 20 items on a 4 point scale with higher values indicating more anxiety
+
+# number 21 is an attention check 
+# higher values = more anxiety, reverse score
+# 1, 3, 6, 7, 10, 13, 14, 16, 19
+
+d1 <- d1 %>% mutate(trait_anx_na = 
+                      apply(dplyr::select(., Q559_1:Q559_20), 
+                            1, 
+                            function(x) sum(is.na(x)))) 
+
+d1$TraitAnx_1r <- car::recode(d1$Q559_1, '1=4; 2=3; 3=2; 4=1')
+d1$TraitAnx_3r <- car::recode(d1$Q559_3, '1=4; 2=3; 3=2; 4=1')
+d1$TraitAnx_6r <- car::recode(d1$Q559_6, '1=4; 2=3; 3=2; 4=1')
+d1$TraitAnx_7r <- car::recode(d1$Q559_7, '1=4; 2=3; 3=2; 4=1')
+d1$TraitAnx_10r <- car::recode(d1$Q559_10, '1=4; 2=3; 3=2; 4=1')
+d1$TraitAnx_13r <- car::recode(d1$Q559_13, '1=4; 2=3; 3=2; 4=1')
+d1$TraitAnx_14r <- car::recode(d1$Q559_14, '1=4; 2=3; 3=2; 4=1')
+d1$TraitAnx_16r <- car::recode(d1$Q559_16, '1=4; 2=3; 3=2; 4=1')
+d1$TraitAnx_19r <- car::recode(d1$Q559_19, '1=4; 2=3; 3=2; 4=1')
+
+d1 <- d1 %>% mutate(trait_anx_sum= 
+                      case_when(trait_anx_na <3 ~apply(dplyr::select(., "TraitAnx_1r","Q559_2","TraitAnx_3r","Q559_4","Q559_5","TraitAnx_6r", "TraitAnx_7r", "Q559_8", "Q559_9", "TraitAnx_10r", "Q559_11", "Q559_12", "TraitAnx_13r","TraitAnx_14r", "Q559_15", "TraitAnx_16r", "Q559_17", "Q559_18", "TraitAnx_19r", "Q559_20"),1,sum, na.omit=T)))
+
+    ## Standardizing predictors (M = 0, SD = 1)
+
+d1$EQ <- base::scale(d1$equiv_perc, center = TRUE, scale = TRUE)
+d1$MA <- base::scale(d1$ma_agg, center = TRUE, scale = TRUE)
+d1$Age <- base::scale(d1$AgeSurvey, center = TRUE, scale = TRUE)
+d1$PAE <- base::scale(d1$PAE_agg, center = TRUE, scale = TRUE)
+d1$MAQ <- base::scale(d1$maq_mean, center = TRUE, scale = TRUE)
+d1$SGL <- base::scale(d1$sgl_sum, center = TRUE, scale = TRUE)
+d1$OGL <- base::scale(d1$ogl_sum, center = TRUE, scale = TRUE)
+d1$NSR <- base::scale(d1$SC0, center = TRUE, scale = TRUE)
+d1$TORR <- base::scale(d1$torr_sum, center = TRUE, scale = TRUE)
+
+d1$MA_F <- base::scale(d1$ma_frac, center = TRUE, scale = TRUE)
+d1$MAQ_F <- base::scale(d1$maq_fr, center = TRUE, scale = TRUE)
+
+d1$ANX <- base::scale(d1$trait_anx_sum, center = TRUE, scale = TRUE) 
+
+d1$Cond_v2 <- relevel(d1$Cond_v, ref="NL")
+
+d2 <- d1 %>% filter(filters==0)
+
+```
+
+```{r Covariate reliability and descriptives, echo=FALSE}
+
+d2 <- d1 %>% filter(filters==0)
+
+table(d2$dm_pretest_cor)
+
+# 0   1 
+# 106 131 
+
+psych::describe(d2$PAE_sm)
+# vars   n mean   sd median trimmed  mad  min max range skew kurtosis se
+# X1    1 236 0.03 0.02   0.03    0.03 0.01 0.01 0.3  0.29 8.83   107.76  0
+
+psych::describe(d2$PAE_lg)
+# vars   n mean  sd median trimmed  mad  min  max range skew kurtosis   se
+# X1    1 237 0.11 0.1   0.07    0.09 0.05 0.02 0.45  0.43 1.56     1.55 0.01
+
+psych::describe(d2$PAE_agg)
+# vars   n mean   sd median trimmed  mad  min  max range skew kurtosis se
+# X1    1 237 0.07 0.05   0.05    0.06 0.03 0.02 0.24  0.23 1.47     1.31  0
+
+psych::describe(d2$equiv_perc)
+# vars   n mean   sd median trimmed  mad min max range  skew kurtosis   se
+# X1    1 237 0.73 0.26   0.83    0.76 0.25   0   1     1 -0.81    -0.16 0.02
+
+# Subjective graph literacy
+x <-d2%>% dplyr::select(., sgl_1:sgl_5)
+alpha(x) # .94 
+
+psych::describe(d2$sgl_sum)
+# vars   n  mean   sd median trimmed  mad min max range  skew kurtosis   se
+# X1    1 237 25.48 5.98     27   26.02 4.45   5  35    30 -1.07     1.54 0.39
+
+# Objective graph literacy
+psych::describe(d2$ogl_sum)
+# vars   n mean   sd median trimmed  mad min max range  skew kurtosis   se
+# X1    1 237 2.27 1.09      2    2.29 1.48   0   4     4 -0.25    -0.59 0.07
+
+# MA
+psych::describe(d2$ma_agg)
+
+# MAQ
+psych::describe(d2$maq_mean)
+# vars   n mean   sd median trimmed  mad  min max range skew kurtosis   se
+#X1    1 237 3.92 0.81   3.96    3.95 0.69 1.39   6  4.61 -0.3     0.15 0.05
+
+# Relational reasoning
+psych::describe(d2$torr_sum)
+# vars   n mean   sd median trimmed  mad min max range  skew kurtosis   se
+# X1    1 237 2.73 0.97      3    2.81 1.48   0   4     4 -0.46    -0.26 0.06
+
+# Non-symbolic ratio
+psych::describe(d2$NS_ratio)
+# vars   n mean   sd median trimmed  mad  min max range  skew kurtosis   se
+# X1    1 237 0.69 0.19   0.72    0.71 0.16 0.11   1  0.89 -0.91     0.29 0.01
+
+# risk for self
+x <- d2 %>% dplyr::select(riskself1r, riskself2r, riskself3r, riskself4r)
+alpha(x) # Self a = .79
+psych::describe(d2$risk_other_avg) # M = 2.67, SD = 0.86, NA = 5 (2%)
+
+# risk for other
+x <- d2 %>% dplyr::select(riskother1r, riskother2r, riskother3r, riskother4r)
+alpha(x) # Other a = .90
+psych::describe(d2$risk_self_avg) # M = 2.38, SD = 0.82, NA = 13 (5%)
+
+# risk for self and other combined
+x <- d2 %>% dplyr::select(riskself1r, riskself2r, riskself3r, riskself4r, riskother1r, riskother2r, riskother3r, riskother4r)
+alpha(x) # Total a = .83
+
+# Worry
+summary(d2$worry_na) #no participants with missing data in final sample
+
+x <- d2 %>% dplyr::select(worryself1, worryself2,worryother1, worryother2)
+alpha(x) ## .87
+
+psych::describe(d2$worry_self) # M = 2.70, SD = 1.24
+psych::describe(d2$worry_other) # M = 3.80, SD = 1.12
+
+cor.test(d2$worryself1, d2$worryself2) # r = .86
+cor.test(d2$worryother1, d2$worryother2) # r = .84
+
+# Severity
+summary(d2$severity_na) # no missing data in final sample
+
+x <- d2 %>% dplyr::select(severity_1, severity_2, severity_3)                                
+alpha(x) ## alpha = .92
+
+# Health behaviors
+
+summary(d2$healthbeh_na) #no participants in final sample had missing data
+
+x <- d2 %>% dplyr::select("Q439_1","Q439_2","Q439_3", "Q439_4", "Q439_5",
+                                        "Q439_6", "Q439_7", "Q439_8", "Q439_10")
+alpha(x) ## alpha = .82
+
+psych::describe(d2$healthbeh_mean) # M = 4.25, SD = 0.48 
+
+# Trait anxiety
+
+x <- d2 %>% dplyr::select("Q559_1","Q559_2","Q559_3", "Q559_4","Q559_5","Q559_6", "Q559_7", "Q559_8", "Q559_9", "Q559_10", "Q559_11", "Q559_12","Q559_13", "Q559_14", "Q559_15", "Q559_16", "Q559_17", "Q559_18","Q559_19","Q559_20")
+alpha(x,check.keys=TRUE) ## alpha = .91
+
+psych::describe(d2$trait_anx_sum)
+
+```
+
+```{r Problem accuracy, include=FALSE}
+## Coding for Problems Solving variables and condition 
+
+d1 <- d1 %>% mutate(Order = as.factor(case_when(cond == "0a" ~ "a",
+                                                cond == "1a" ~ "a",
+                                                cond == "2a" ~ "a",
+                                                cond == "3a" ~ "a", 
+                                                cond == "0b" ~ "b",
+                                                cond == "1b" ~ "b",
+                                                cond== "2b" ~ "b",
+                                                cond== "3b" ~ "b")))
+
+d1 <- d1 %>% dplyr::rename(dm_pretest = Q142,
+                    dm_uni = Q516,
+                    dm_bowls = Q523,
+                    dm_global = Q551,
+                    dm_another = Q611,
+                    dm_ww1 = Q541,
+                    dm_march = Q533,
+                    dm_ages = Q547,
+                    dm_oct = 'Q535...57')
+
+# Recoding order
+
+levels(d1$Order)
+d1 <- d1 %>% mutate(dm_pretest_cor = 
+                      case_when(dm_pretest == "1" ~ 1,
+                                T ~ 0),
+                    dm_uni_cor = 
+                      case_when(dm_uni == 1 & Order == "a" ~ 1,
+                                dm_uni == 2 & Order =="b" ~ 1,
+                                T ~ 0),
+                    dm_bowls_cor =
+                      case_when(dm_bowls ==1 & Order == "a" ~ 1,
+                                dm_bowls ==2 & Order == "b" ~ 1,
+                                T ~ 0),
+                    dm_global_cor = 
+                      case_when(dm_global == 2 ~ 1,
+                                T ~ 0),
+                    dm_another_cor = 
+                      case_when(dm_another == 1 ~ 1,
+                                T ~0),
+                    dm_ww1_cor =
+                      case_when(dm_ww1 == 1 ~ 1,
+                                T ~ 0),
+                    dm_march_cor = 
+                      case_when(dm_march == 2 ~ 1,
+                                T ~ 0),
+                    dm_ages_cor = 
+                      case_when(dm_ages == 1 ~ 1,
+                                T ~ 0),
+                    dm_oct_cor = 
+                      case_when(dm_oct == 2 ~ 1,
+                                T ~ 0))
+
+d1$dm_pretest_cor <- factor(d1$dm_pretest_cor,
+                            levels=c("0", "1"))
+d2 <- d1 %>% filter(filters==0)
+# Testing order effects
+
+## UNIVERSITY
+chisq.test(table(d2$dm_uni_cor, d2$Order))
+# No order effects, X-squared = 0.58834, df = 1, p-value = 0.4431
+
+## BOWLS 
+chisq.test(table(d2$dm_bowls_cor, d2$Order))
+# No order effect, X-squared = 1.361, df = 1, p-value = 0.2434
+
+## GLOBAL
+chisq.test(table(d2$dm_global_cor, d2$Order))
+# No order effect, X-squared = 0.010953, df = 1, p-value = 0.9166
+
+## ANOTHER 
+chisq.test(table(d2$dm_another_cor, d2$Order))
+# No order effect, X-squared = 2.8727e-31, df = 1, p-value = 1
+
+## World War I 
+chisq.test(table(d2$dm_ww1_cor, d2$Order))
+# No order effect, X-squared = 0.14231, df = 1, p-value = 0.706
+
+## MARCH 
+chisq.test(table(d2$dm_march_cor, d2$Order))
+# No order effect, X-squared = 0.00025175, df = 1, p-value = 0.9873
+
+## AGES 
+chisq.test(table(d2$dm_ages_cor, d2$Order))
+# No order effect, X-squared = 0.88474, df = 1, p-value = 0.3469
+
+## OCT
+chisq.test(table(d2$dm_oct_cor, d2$Order))
+# No order effect,X-squared = 0, df = 1, p-value = 1
+
+d2 <- d1 %>% filter(filters==0)
+
+## Reliability of  problems
+
+x <- d2 %>% dplyr::select(ends_with("_cor")) 
+x <- x %>% dplyr::select(-dm_pretest_cor)
+alpha(x) #alpha = .65, improves if ww1 is dropped, stays the same if ages is dropped
+
+x <- x %>% dplyr::select(-dm_ww1_cor, -dm_ages_cor)
+alpha(x) #alpha = .73, doesn't improve if any additional items are dropped
+
+#Checking if DM problems "hang together" 
+x <- d2 %>% dplyr::select(., ends_with("_cor"), -dm_pretest_cor)
+
+apa.cor.table(x, landscape = TRUE) ## same as below but without saving to a document. 
+# apa.cor.table(dmcorr,filename="DMCorTable.doc",landscape = TRUE) 
+
+#ww1 and ages problems don't correlate with all of the others
+
+x <- d2 %>% dplyr::select(., ends_with("_cor"), -dm_pretest_cor,-dm_ww1_cor, -dm_ages_cor)
+apa.cor.table(x,filename="DMCorExTable.doc",landscape = TRUE) 
+
+#all items sig correlated
+
+## Calculate Problem Solving accuracy sum 
+#dm_sum = all DM items, dm_sum_limit = 6 DM items that hang together
+d1 <- d1 %>% mutate(dm_sum = 
+                      apply(dplyr::select(., ends_with("_cor"), -dm_pretest_cor), 1, sum, na.rm=T),
+                    dm_sum_limit = 
+                      apply(dplyr::select(., ends_with("_cor"), -dm_pretest_cor, -dm_ww1_cor, -dm_ages_cor), 1, sum, na.rm=T),
+                    dm_sum_5 = 
+                      apply(dplyr::select(., ends_with("_cor"), -dm_pretest_cor, -dm_ww1_cor, -dm_ages_cor,-dm_bowls_cor), 1, sum, na.rm=T))
+
+d2 <- d1 %>% filter(filters==0)
+
+psych::describe(d2$dm_sum)
+# vars   n mean   sd median trimmed  mad min max range  skew kurtosis   se
+# X1    1 237 5.24 1.87      6    5.37 1.48   0   8     8 -0.62    -0.32 0.12
+
+psych::describe(d2$dm_sum_limit)
+# vars   n mean   sd median trimmed  mad min max range  skew kurtosis   se
+# X1    237 4.55 1.65      5    4.78 1.48   0   6     6 -0.93    -0.21 0.11
+
+# dmacctable<-d2 %>% 
+#   group_by(Cond_v) %>%
+#   summarise(n = n(), 
+#             pretest= (sum(dm_pretest_cor)/n)*100,
+#             ages=(sum(dm_ages_cor)/n)*100,
+#             another=(sum(dm_another_cor)/n)*100,
+#             bowls=(sum(dm_bowls_cor)/n)*100, 
+#             global=(sum(dm_global_cor)/n)*100, 
+#             march=(sum(dm_march_cor)/n)*100, 
+#             oct=(sum(dm_oct_cor)/n)*100, 
+#             uni=(sum(dm_uni_cor)/n)*100, 
+#             ww1=(sum(dm_ww1_cor/n)*100)) %>% ungroup() 
+# dmacctable
+# 
+# dmacctable<-as.data.frame(dmacctable)
+# 
+# write_csv(dmacctable, "Accuracy by Item by Cond.csv")
+```
+
+```{r Problem strategy, include=FALSE}
+
+stratcodes <- stratcodes %>% dplyr::rename(Cond = Cond_v)
+
+stratcodes <- stratcodes %>% dplyr::select(-strat)
+
+# Combine into wide file for regression analyses
+
+stratcodes_wide <- stratcodes %>% pivot_wider(id_cols = "id",
+                                              names_from= "quest",
+                                              values_from = WNB:Other)
+
+d1<- merge(d1, stratcodes_wide, by="id", all=T)
+
+d1 <- d1 %>% mutate(WNB_sum = 
+                      apply(dplyr::select(., WNB_march:WNB_uni,-WNB_ww1, -WNB_ages), 1, sum, na.rm=T),
+                    HM_sum = 
+                      apply(dplyr::select(., HM_march:HM_uni,-HM_ww1, -HM_ages), 1, sum, na.rm=T),
+                    NonNum_sum = 
+                      apply(dplyr::select(., NonNum_march:NonNum_uni,-NonNum_ww1, -NonNum_ages), 1, sum, na.rm=T),
+                    Vis_sum = 
+                      apply(dplyr::select(., Vis_march:Vis_uni,-Vis_ww1, -Vis_ages), 1, sum, na.rm=T))
+
+# Summary table
+
+# strattable<-d2 %>% 
+#   group_by(Cond_v) %>%
+#   summarise(n = n(), 
+#             WNB_pretest= (sum(WNB_pretest)/n)*100,
+#             WNB_ages=(sum(WNB_ages)/n)*100,
+#             WNB_another=(sum(WNB_another)/n)*100,
+#             WNB_bowls=(sum(WNB_bowls)/n)*100, 
+#             WNB_global=(sum(WNB_global)/n)*100, 
+#             WNB_march=(sum(WNB_march)/n)*100, 
+#             WNB_oct=(sum(WNB_oct)/n)*100, 
+#             WNB_uni=(sum(WNB_uni)/n)*100, 
+#             WNB_ww1=(sum(WNB_ww1/n)*100),
+#             HM_pretest= (sum(HM_pretest)/n)*100,
+#             HM_ages=(sum(HM_ages)/n)*100,
+#             HM_another=(sum(HM_another)/n)*100,
+#             HM_bowls=(sum(HM_bowls)/n)*100, 
+#             HM_global=(sum(HM_global)/n)*100, 
+#             HM_march=(sum(HM_march)/n)*100, 
+#             HM_oct=(sum(HM_oct)/n)*100, 
+#             HM_uni=(sum(HM_uni)/n)*100, 
+#             HM_ww1=(sum(HM_ww1/n)*100),
+#             Vis_pretest= (sum(Vis_pretest)/n)*100,
+#             Vis_ages=(sum(Vis_ages)/n)*100,
+#             Vis_another=(sum(Vis_another)/n)*100,
+#             Vis_bowls=(sum(Vis_bowls)/n)*100, 
+#             Vis_global=(sum(Vis_global)/n)*100, 
+#             Vis_march=(sum(Vis_march)/n)*100, 
+#             Vis_oct=(sum(Vis_oct)/n)*100, 
+#             Vis_uni=(sum(Vis_uni)/n)*100, 
+#             Vis_ww1=(sum(Vis_ww1/n)*100),
+#             NonNum_pretest= (sum(NonNum_pretest)/n)*100,
+#             NonNum_ages=(sum(NonNum_ages)/n)*100,
+#             NonNum_another=(sum(NonNum_another)/n)*100,
+#             NonNum_bowls=(sum(NonNum_bowls)/n)*100, 
+#             NonNum_global=(sum(NonNum_global)/n)*100, 
+#             NonNum_march=(sum(NonNum_march)/n)*100, 
+#             NonNum_oct=(sum(NonNum_oct)/n)*100, 
+#             NonNum_uni=(sum(NonNum_uni)/n)*100, 
+#             NonNum_ww1=(sum(NonNum_ww1/n)*100),
+#             Math_pretest= (sum(Math_pretest)/n)*100,
+#             Math_ages=(sum(Math_ages)/n)*100,
+#             Math_another=(sum(Math_another)/n)*100,
+#             Math_bowls=(sum(Math_bowls)/n)*100, 
+#             Math_global=(sum(Math_global)/n)*100, 
+#             Math_march=(sum(Math_march)/n)*100, 
+#             Math_oct=(sum(Math_oct)/n)*100, 
+#             Math_uni=(sum(Math_uni)/n)*100, 
+#             Math_ww1=(sum(Math_ww1/n)*100),
+#             Other_pretest= (sum(Other_pretest)/n)*100,
+#             Other_ages=(sum(Other_ages)/n)*100,
+#             Other_another=(sum(Other_another)/n)*100,
+#             Other_bowls=(sum(Other_bowls)/n)*100, 
+#             Other_global=(sum(Other_global)/n)*100, 
+#             Other_march=(sum(Other_march)/n)*100, 
+#             Other_oct=(sum(Other_oct)/n)*100, 
+#             Other_uni=(sum(Other_uni)/n)*100, 
+#             Other_ww1=(sum(Other_ww1/n)*100)) %>% ungroup() 
+# strattable
+# 
+# write_csv(strattable, "Strategy Use by Condition and Item.csv")
+
+```
+
+```{r Demographics, echo=FALSE}
+
+## Demographics #### 
+
+# gender(1 = male, 2=female,3 = nonbinary, 4 = different,9 = rather not report)
+
+table(d2$Gender)
+# 1   2   4   9 
+# 31 200   1   4
+
+# race(1 = White, 2=Black or African American,3 = American Indian or Alaska Native, 4 = Asian, 5 = Native Hawaiian or Pacific Islander, 6 = Hispanic or Latino,7 = Other, 8 = Rather not report)
+
+table(d2$Race)
+table(d2$White)
+
+# Education / Class-standing (1 = freshman,2 = sophomore,3 = Junior,4 = Senior) 
+
+table(d2$Education)
+#  1   2   3   4 
+# 148  43  29  16
+
+# Number of math courses
+
+table(d2$nummath)
+describe(d2$nummath)
+
+table(d1$Cond_v) # before exclusions
+#   No Model       NL       RL       IA 
+#     66       71    66              67 
+
+table(d2$Cond_v) # after exclusions
+#   No Model       NL       RL       IA  
+#     57          61          61          58 
+
+table(d2$male) # after exclusions
+# 31 males; 206 females 
+
+# AgeSurvey 
+psych::describe(d2$AgeSurvey)
+#    vars   n  mean   sd median trimmed  mad min max range skew kurtosis   se
+#X1    1 234 19.02 1.98     19   18.68 1.48  16  37    21 4.52    31.88 0.13
+
+## Demographics for excluded sample 
+
+d3 <- d1 %>% filter(filters>0)
+
+describe(d3$AgeSurvey) #M = 19.16, SD = 1.55
+prop.table(table(d3$White)) # 20 white (61%)
+prop.table(table(d3$male)) # 27 non-males (82%)
+```
+
+```{r Differences by location}
+
+# Demo for each site
+
+d1$ksu <- factor(d1$ksu,
+                 levels = c("0", "1"),
+                 labels = c("UK", "KSU"))
+
+d2 <- d1 %>% filter(filters==0)
+
+chisq.test(table(d2$White, d2$ksu))
+chisq.test(table(d2$male, d2$ksu))
+
+agebysite<-d2 %>% 
+  group_by(ksu) %>%
+  summarise(Mean=mean(AgeSurvey,na.rm=TRUE),
+            SD=sd(AgeSurvey,na.rm=TRUE))
+agebysite
+
+var.test(d2$AgeSurvey ~ d2$ksu) 
+t.test(d2$AgeSurvey ~ d2$ksu, var.equal=FALSE) #KSU sample marginally older than UK sample
+
+# checking pretest differences
+chisq.test(table(d2$dm_pretest_cor, d2$ksu)) # X-squared = 3.5111, df = 1, p-value = 0.06096
+
+# Checking ratio problem performance differences
+var.test(d2$dm_sum ~ d2$ksu) 
+t.test(d2$dm_sum ~ d2$ksu, var.equal=TRUE)# no difference, t(235) = 0.04, p = .965
+
+# Checking health cog differences
+
+var.test(d2$risk_self_avg ~ d2$ksu) 
+t.test(d2$risk_self_avg ~ d2$ksu, var.equal=TRUE)# no difference, t(222) = 0.30, p = .762
+
+var.test(d2$risk_other_avg ~ d2$ksu) 
+t.test(d2$risk_other_avg ~ d2$ksu, var.equal=TRUE)# ksu higher, t(230) = 2.35, p = .020
+cohens_d(d2$risk_other_avg ~ d2$ksu, var.equal = TRUE) #d = 0.31
+
+var.test(d2$worry_self ~ d2$ksu) 
+t.test(d2$worry_self ~ d2$ksu, var.equal=TRUE)# ksu higher, t(235) = 2.03, p = .044
+cohens_d(d2$worry_self ~ d2$ksu, var.equal = TRUE) # d = 0.26
+
+var.test(d2$worry_other ~ d2$ksu) 
+t.test(d2$worry_other ~ d2$ksu, var.equal=TRUE)# no difference, t(235) = 0.18, p = .857
+
+var.test(d2$severity ~ d2$ksu) 
+t.test(d2$severity ~ d2$ksu, var.equal=FALSE)# ksu higher, t(224.38) = 2.50, p = .013
+cohens_d(d2$severity ~ d2$ksu, var.equal = FALSE) # d = 0.33
+
+var.test(d2$healthbeh_mean ~ d2$ksu) 
+t.test(d2$healthbeh_mean ~ d2$ksu, var.equal=TRUE)# no difference, t(235) = 0.56, p = .578
+
+```
+
+```{r Checking random assignment, include=FALSE}
+
+# Gender
+table(d2$male, d2$Cond_v)
+chisq.test(table(d2$male, d2$Cond_v))
+
+# X-squared = 6.0776, df = 3, p-value = 0.1079
+# No gender differences by condition
+
+# Survey Time 
+psych::describe(d2$rt_min)
+m1<- aov(rt_min ~ Cond_v, data=d2)
+Anova(m1, type=3, test="F") 
+# no condition differences f(3, 233) = 0.36, p = .7799
+
+# Age
+m1<- aov(AgeSurvey ~ Cond_v, data=d2)
+Anova(m1, type=3, test="F")
+emmeans(m1, pairwise ~ Cond_v)
+
+# F(1,230) = 3.39, p = .018
+# Condition differences in age: Age in control higher than in NL, marginally higher than Icon
+
+# Education / Class-standing 
+table(d2$Education, d2$Cond_v)
+chisq.test(table(d2$Education, d2$Cond_v))
+
+# X-squared = 9.379, df = 9, p-value = 0.403, warning message about ChiSq Approx 
+
+# Recoding to be lower (freshmen/sophmore) vs upper classmen (junior/senior)
+d2 <- d2 %>% mutate(education2 = case_when(Education < 3 ~ 1,
+                                           Education >2 ~2))
+table(d2$education2, d2$Cond_v)
+chisq.test(table(d2$education2, d2$Cond_v))
+
+# X-squared = 6.1694, df = 3, p-value = 0.1037
+# No condition differences in year
+
+# Calc Use
+table(d2$calcuse)
+table(d2$calcuse, d2$Cond_v)
+chisq.test(table(d2$calcuse, d2$Cond_v))
+# X-squared = 1.5676, df = 3, p-value = 0.6668
+# Calculator use did not vary by condition
+
+# PAE 
+m1 <- aov(PAE_agg ~ Cond_v, data=d2)
+Anova(m1, type=3, test="F")
+# no cond differences in aggregated PAE, F(3,233)=0.78,p=.505
+
+m1 <- aov(PAE_lg ~ Cond_v, data=d2)
+Anova(m1, type=3, test="F")
+# no cond differences in large range PAE, F(3,233)=0.54, p = .657
+
+m1 <- aov(PAE_sm ~ Cond_v, data=d2)
+Anova(m1, type=3, test="F")
+# no condition differences in small range PAE, F(3,232)=0.57,p = 0.636
+
+# Equivalence Knowledge 
+m1 <- aov(equiv_perc ~ Cond_v, data=d2)
+Anova(m1, type=3, test="F")
+# no condition differences in EQ, F(3,233)=0.27,p = .850
+
+# Number of math courses
+m1 <- aov(nummath ~ Cond_v, data=d2)
+Anova(m1, type=3, test="F")
+# No differences in number of math courses taken
+# F(3,232) = 0.764, p = .516
+
+# Accuracy and Strategies at pretest
+
+# Pretest accuracy
+table(d2$dm_pretest_cor, d2$Cond_v)
+chisq.test(table(d2$dm_pretest_cor, d2$Cond_v))
+
+# X-squared = 2.4328, df = 3, p-value = 0.4876
+# No pretest differences by condition
+
+# Pretest WNB
+table(d2$WNB_pretest, d2$Cond_v)
+chisq.test(table(d2$WNB_pretest, d2$Cond_v))
+# No differences in WNB strategies at pretest
+# X-squared = 4.0316, df = 3, p-value = 0.2581
+
+# Pretest HM
+table(d2$HM_pretest, d2$Cond_v)
+chisq.test(table(d2$HM_pretest, d2$Cond_v))
+# No differences in HM strategies at pretest 
+# X-squared = 2.3761, df = 3, p-value = 0.4981
+
+```
+
+```{r Correlations and descriptives, echo=FALSE}
+
+d1$id<-as.factor(d1$id)
+
+d2 <- d1 %>% filter(filters==0)
+
+x <- d2 %>% select(dm_sum,dm_sum_limit,PAE_lg,PAE_sm,PAE_agg,equiv_perc, 
+                   ma_agg, maq_mean, sgl_sum, ogl_sum, NS_ratio,torr_sum, 
+                   risk_self_avg, risk_other_avg, worry_self, worry_other,
+                   severity,healthbeh_mean) 
+
+# apa.cor.table(x,filename="CorTable.doc",landscape = TRUE) 
+
+## DM Strategies
+
+cor.test(d2$WNB_sum, d2$HM_sum) # -.73
+
+x <- d2 %>% select(id,WNB_sum,HM_sum,
+                   dm_sum_limit,PAE_lg,PAE_sm,PAE_agg,equiv_perc, 
+                   ma_agg, maq_mean, sgl_sum, ogl_sum, NS_ratio,torr_sum, 
+                   risk_self_avg, risk_other_avg, worry_self, worry_other,
+                   severity, healthbeh_mean) 
+
+apa.cor.table(x,filename="CorTableStrat.doc",landscape = TRUE) 
+
+```
+
+```{r Accuracy for 6 items, echo=FALSE}
+## ANOVA 
+sixitem <- lm(dm_sum_limit ~ Cond_v,
+              data = d2)
+anova(sixitem)
+
+effectsize::eta_squared(sixitem, partial=T)
+emmeans(sixitem, pairwise ~ Cond_v) ## NL > no model and risk ladder. No different from IA. 
+
+## linear regression 
+
+sixitem <- lm(dm_sum_limit ~ Cond_v + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ,
+              data = d2)
+print(summary(sixitem))
+modelEffectSizes(sixitem) 
+
+# with NL as ref
+
+sixitem2 <- lm(dm_sum_limit ~ Cond_v2 + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ,
+               data = d2)
+print(summary(sixitem2))
+vif(sixitem2) # VIF < 2 for all predictors, indicating acceptable multicollinearity
+modelEffectSizes(sixitem2) 
+
+# stargazer(sixitem2,type="text", digits=2,
+#           out="SixItemRegression.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+
+partial_f2(sixitem2)
+
+# checking if calcuse matters
+
+sixitemcalc <- lm(dm_sum_limit ~ Cond_v2 + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + calcuse,
+              data = d2)
+print(summary(sixitemcalc)) # calcuse ns, doesn't change pattern of results
+
+# checking if site matters
+sixitemsite <- lm(dm_sum_limit ~ Cond_v + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + ksu,
+              data = d2)
+print(summary(sixitemsite)) # site ns, doesn't change pattern of results
+
+```
+
+```{r Graph of Accuracy results (6 items), echo=FALSE}
+
+CondAcc <- effect('Cond_v2', sixitem2,
+                          xlevels=list(ANLGType = c("NL","No Model", "RL","IA"),
+                          se=TRUE, confidence.level=.95, typical=mean))
+
+CondAcc <- as.data.frame(CondAcc)
+
+CondAcc$Cond_v2<-factor(CondAcc$Cond_v2,
+                          levels = c("NL","No Model","RL","IA"), 
+                          labels = c("Number Line", "No Model", "Risk Ladder","Icon Array"))
+
+dodge<-position_dodge(width=.85)
+
+barCondAcc<-ggplot(data = CondAcc, aes(x = Cond_v2, y = fit))+	
+  geom_bar(stat="identity",position="dodge", fill="gray")+
+  geom_errorbar(aes(ymin=lower, ymax=upper),position = dodge,width=.15)+
+  scale_y_continuous(limits = c(0,6),breaks=seq(0,6, by = 1))+
+  scale_x_discrete(labels=c("Number \nLine", "No \nModel", "Risk \nLadder","Icon \nArray"))+
+  xlab("Condition")+ylab("Score (out of 6)")+	
+  theme_classic() + 
+  theme(text = element_text(color = "black"),
+        legend.position = "top", 
+        legend.direction = "horizontal",
+        legend.justification = 0.5, 
+        legend.title=element_blank(),
+        axis.text.x = element_text(family ="sans", size=16,color = "black"),
+        axis.text.y = element_text(family ="sans", size=16,color = "black"),
+        axis.title.x = element_text(family ="sans",size=16,color = "black"), 
+        axis.title.y = element_text(family ="sans", size=16,color = "black"),
+        strip.text = (element_text(family ="sans",size=16,color = "black")))
+barCondAcc
+
+ggsave(filename="Covid Corr Cond Acc.png", plot=barCondAcc, device="png", height=5, width=5, units="in", dpi=500)
+```
+
+```{r Strategy for 6 items, echo=FALSE}
+
+# linear regression
+
+WNBallpred <- lm(WNB_sum ~ Cond_v2 + WNB_pretest + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ,
+                 data = d2)
+print(summary(WNBallpred))
+
+HMallpred <- lm(HM_sum ~ Cond_v2 + HM_pretest + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ,
+                data = d2)
+print(summary(HMallpred))
+
+NonNumallpred <- lm(NonNum_sum ~ Cond_v2 +  PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ,
+                    data = d2)
+print(summary(NonNumallpred))
+
+Visallpred <- lm(Vis_sum ~ Cond_v2 +  PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ,
+                 data = d2)
+print(summary(Visallpred))
+
+# stargazer(WNBallpred, HMallpred, Visallpred,NonNumallpred,type="text", digits=2,
+#           out="StratRegression.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+
+```
+
+```{r Data prep for mixed models, include=FALSE}
+
+# Dummy codes with NL as ref
+d1$NLvsIA <- ifelse(d1$Cond_v == 'IA', 1, 0)
+d1$NLvsRL <- ifelse(d1$Cond_v == 'RL', 1, 0)
+d1$NLvsNoModel <- ifelse(d1$Cond_v == 'No Model', 1, 0)
+
+# Dummy codes with No Model as ref
+d1$NoModelvsIA <- ifelse(d1$Cond_v == 'IA', 1, 0)
+d1$NoModelvsRL <- ifelse(d1$Cond_v == 'RL', 1, 0)
+d1$NoModelvsNL <- ifelse(d1$Cond_v == 'NL', 1, 0)
+
+d2 <- d1 %>% filter(filters==0)
+
+x <- d2 %>% dplyr::select(id, NLvsIA,NLvsRL,NLvsNoModel,NoModelvsIA,NoModelvsRL, NoModelvsNL,Cond_v, Cond_v2,dm_sum,dm_sum_limit,PAE,EQ, MA,
+                   MAQ, MA_F, MAQ_F, TORR, SGL, OGL, NSR,calcuse,ksu,
+                   ends_with("_cor"))
+
+dmaccl <- x %>% pivot_longer(dm_uni_cor:dm_oct_cor,
+                             names_to = "item",
+                             values_to = "score")
+
+dmaccl$item <- factor((dmaccl$item))
+
+dmaccl$dm_pretest_cor <- factor((dmaccl$dm_pretest_cor))
+
+dmaccl$dm_pretest_cor <- factor(dmaccl$dm_pretest_cor,
+                                levels=c("0", "1"))
+
+# removing bowls problem (since it's not health related)
+
+x <- d2 %>% dplyr::select(id, Cond_v, Cond_v2,dm_sum,dm_sum_limit,PAE,EQ, MA,MA_F, 
+                          MAQ_F,MAQ, TORR, SGL, OGL, NSR,calcuse,
+                   ends_with("_cor"),-dm_bowls_cor)
+
+dmacclnobowls <- x %>% pivot_longer(dm_uni_cor:dm_oct_cor,
+                             names_to = "item",
+                             values_to = "score")
+
+dmacclnobowls$item <- factor((dmacclnobowls$item))
+
+dmacclnobowls$dm_pretest_cor <- factor((dmacclnobowls$dm_pretest_cor))
+
+dmacclnobowls$dm_pretest_cor <- factor(dmacclnobowls$dm_pretest_cor,
+                                levels=c("0", "1"))
+
+# Strategy data WNB
+x <- d2 %>% dplyr::select(id, NLvsIA,NLvsRL,NLvsNoModel,NoModelvsIA,NoModelvsRL, NoModelvsNL,Cond_v, Cond_v2,dm_sum,dm_sum_limit,PAE,EQ, MA,
+                   MAQ, MA_F, MAQ_F, TORR, SGL, OGL, NSR,calcuse,
+                          starts_with("WNB_"))
+
+dmWNBstratl <- x %>% pivot_longer(WNB_march:WNB_uni,
+                             names_to = "item",
+                             values_to = "WNB")
+
+dmWNBstratl$item <- factor((dmWNBstratl$item))
+
+dmWNBstratl$WNB_pretest <- factor((dmWNBstratl$WNB_pretest))
+
+dmWNBstratl$WNB_pretest <- factor(dmWNBstratl$WNB_pretest,
+                                levels=c("0", "1"))
+
+# Strategy data HM
+x <- d2 %>% dplyr::select(id, NLvsIA,NLvsRL,NLvsNoModel,NoModelvsIA,NoModelvsRL, NoModelvsNL,Cond_v, Cond_v2,dm_sum,dm_sum_limit,PAE,EQ, MA,
+                   MAQ, MA_F, MAQ_F, TORR, SGL, OGL, NSR,calcuse,
+                          starts_with("HM_"))
+
+dmHMstratl <- x %>% pivot_longer(HM_march:HM_uni,
+                             names_to = "item",
+                             values_to = "HM")
+
+dmHMstratl$item <- factor((dmHMstratl$item))
+
+dmHMstratl$HM_pretest <- factor((dmHMstratl$HM_pretest))
+
+dmHMstratl$HM_pretest <- factor(dmHMstratl$HM_pretest,
+                                levels=c("0", "1"))
+
+# Strategy data Vis
+x <- d2 %>% dplyr::select(id, NLvsIA,NLvsRL,NLvsNoModel,NoModelvsIA,NoModelvsRL, NoModelvsNL,Cond_v, Cond_v2,dm_sum,dm_sum_limit,PAE,EQ, MA,
+                   MAQ, MA_F, MAQ_F, TORR, SGL, OGL, NSR,calcuse,
+                          starts_with("Vis_"))
+
+dmVisstratl <- x %>% pivot_longer(Vis_march:Vis_uni,
+                             names_to = "item",
+                             values_to = "Vis")
+
+dmVisstratl$item <- factor((dmVisstratl$item))
+
+dmVisstratl$Vis_pretest <- factor((dmVisstratl$Vis_pretest))
+
+dmVisstratl$Vis_pretest <- factor(dmVisstratl$Vis_pretest,
+                                levels=c("0", "1"))
+
+# Strategy data NonNum
+x <- d2 %>% dplyr::select(id, NLvsIA,NLvsRL,NLvsNoModel,NoModelvsIA,NoModelvsRL, NoModelvsNL,Cond_v, Cond_v2,dm_sum,dm_sum_limit,PAE,EQ, MA,
+                   MAQ, MA_F, MAQ_F, TORR, SGL, OGL, NSR,calcuse,
+                          starts_with("NonNum_"))
+
+dmNonNumstratl <- x %>% pivot_longer(NonNum_march:NonNum_uni,
+                             names_to = "item",
+                             values_to = "NonNum")
+
+dmNonNumstratl$item <- factor((dmNonNumstratl$item))
+
+dmNonNumstratl$NonNum_pretest <- factor((dmNonNumstratl$NonNum_pretest))
+
+dmNonNumstratl$NonNum_pretest <- factor(dmNonNumstratl$NonNum_pretest,
+                                levels=c("0", "1"))
+```
+
+```{r Accuracy GLMM all 8 items, echo=FALSE}
+
+# All condition comparisons
+glmall <- glmer(score ~ Cond_v2 + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmaccl)
+summary(glmall) # NL outperforms all other conditions
+car::Anova(glmall, test = "Chisq", type = 3)
+
+exp(fixef(glmall))
+confint.merMod(glmall, method = "Wald")
+
+glmall2 <- glmer(score ~ Cond_v + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmaccl)
+summary(glmall2) # IA and RL no different from no model
+exp(fixef(glmall2))
+confint.merMod(glmall2, method = "Wald")
+
+# Model with dummy coded conditions (NL is ref)
+
+glm <- glmer(score ~ NLvsIA + NLvsRL + NLvsNoModel + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + (1|item) + (1|id),
+             family=binomial(link="logit"),
+             glmerControl(optimizer="Nelder_Mead"),
+             data=dmaccl)
+summary(glm) # model failed to converge
+
+# Trying different optimizer
+glm2 <- glmer(score ~  NLvsIA + NLvsRL + NLvsNoModel + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmaccl)
+summary(glm2) # NL outperforms other formats
+car::Anova(glm2)
+confint.merMod(glm2, method = "Wald")
+
+# Model with dummy coded conditions (No Model is ref)
+
+glm3 <- glmer(score ~ NoModelvsNL + NoModelvsRL + NoModelvsIA + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + (1|item) + (1|id),
+             family=binomial(link="logit"),
+             glmerControl(optimizer="Nelder_Mead"),
+             data=dmaccl)
+summary(glm3) # model failed to converge
+
+# Trying different optimizer
+glm4 <- glmer(score ~  NoModelvsNL + NoModelvsRL + NoModelvsIA + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmaccl)
+summary(glm4) # RL and IA don't differ from No Model
+car::Anova(glm4)
+
+# All condition comparisons no covariates
+glmallnocov <- glmer(score ~ Cond_v2 + dm_pretest_cor + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmaccl)
+summary(glmallnocov) # NL outperforms all other conditions
+car::Anova(glmallnocov, test = "Chisq", type = 3)
+
+exp(fixef(glmallnocov))
+confint.merMod(glmallnocov, method = "Wald")
+
+exp(fixef(glmallnocov))
+confint.merMod(glmallnocov, method = "Wald")
+
+anova(glmall,glmallnocov) # model with covariates is a better fit
+
+# Testing if calc use matters
+glmallcalc <- glmer(score ~ Cond_v2 + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ +calcuse+ (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmaccl)
+summary(glmallcalc) # no difference in results, calcuse ns
+exp(fixef(glmallcalc))
+confint.merMod(glmallcalc, method = "Wald")
+
+glmallcalc2 <- glmer(score ~ Cond_v + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ +calcuse+ (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmaccl)
+summary(glmallcalc2)
+
+# Testing if site matters
+glmallsite <- glmer(score ~ Cond_v2 + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + ksu + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmaccl)
+summary(glmallsite) # no difference in results, site ns
+exp(fixef(glmallsite))
+confint.merMod(glmallsite, method = "Wald")
+
+glmallsite2 <- glmer(score ~ Cond_v + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + ksu + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmaccl)
+summary(glmallsite2)
+
+# Testing if results hold without bowls problem
+glmnobowls <- glmer(score ~ Cond_v2 + dm_pretest_cor + PAE + EQ + OGL + TORR + NSR + SGL + MA + MAQ + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmacclnobowls)
+summary(glmnobowls) # the pattern holds if the bowls problem is removed
+
+glmnobowls2 <- glmer(score ~ Cond_v + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmacclnobowls)
+summary(glmnobowls2) # IA and RL still no different than no model
+
+# Testing fraction-specific MA and MAQ
+glmallfr <- glmer(score ~ Cond_v2 + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA_F + MAQ_F + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmaccl)
+summary(glmallfr) # no difference in results, MAQ_F sig MA_F ns
+car::Anova(glmallfr, test = "Chisq", type = 3)
+exp(fixef(glmallfr))
+confint.merMod(glmallfr, method = "Wald")
+
+glmallfr <- glmer(score ~ NLvsIA + NLvsRL + NLvsNoModel + dm_pretest_cor + PAE + EQ + OGL + NSR + TORR + SGL + MA_F + MAQ_F + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmaccl)
+summary(glmallfr) # no difference in results, MAQ_F sig MA_F ns
+car::Anova(glmallfr, test = "Chisq", type = 3)
+
+glmallfr2 <- glmer(score ~ Cond_v + dm_pretest_cor + PAE + EQ + OGL + TORR+ NSR + SGL + MA_F + MAQ_F +calcuse+ (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmaccl)
+summary(glmallfr2)
+```
+
+```{r Graph of Accuracy results (GLMM 8 items), echo=FALSE}
+
+CondAccGLMM <- effect('Cond_v2', glmall,
+                          xlevels=list(VisType = c("NL","No Model", "RL","IA"),
+                          se=TRUE, confidence.level=.95, typical=mean))
+
+CondAccGLMM <- as.data.frame(CondAccGLMM)
+
+CondAccGLMM$lowCI <- CondAccGLMM$fit-1.96*CondAccGLMM$se 
+CondAccGLMM$upCI <- CondAccGLMM$fit+1.96*CondAccGLMM$se 
+
+CondAccGLMM$minSE <- CondAccGLMM$fit-CondAccGLMM$se
+CondAccGLMM$maxSE <- CondAccGLMM$fit+CondAccGLMM$se
+
+CondAccGLMM$Cond_v2<-factor(CondAccGLMM$Cond_v2,
+                          levels = c("NL","No Model","RL","IA"), 
+                          labels = c("Number Line", "No Model", "Risk Ladder","Icon Array"))
+
+dodge<-position_dodge(width=.85)
+
+barCondAccGLMM<-ggplot(data = CondAccGLMM, aes(x = Cond_v2, y = fit))+	
+  geom_bar(stat="identity",position="dodge", fill="gray")+
+  geom_errorbar(aes(ymin=minSE, ymax=maxSE),position = dodge,width=.15)+
+  scale_y_continuous(limits = c(0,1),breaks=seq(0,1, by = .2))+
+  scale_x_discrete(labels=c("Number \nLine", "No \nVisual", "Risk \nLadder","Icon \nArray"))+
+  xlab("Condition")+ylab("Probability of Correct Response")+	
+  theme_classic() + 
+  theme(text = element_text(color = "black"),
+        legend.position = "top", 
+        legend.direction = "horizontal",
+        legend.justification = 0.5, 
+        legend.title=element_blank(),
+        axis.text.x = element_text(family ="sans", size=16,color = "black"),
+        axis.text.y = element_text(family ="sans", size=16,color = "black"),
+        axis.title.x = element_text(family ="sans",size=16,color = "black"), 
+        axis.title.y = element_text(family ="sans", size=16,color = "black"),
+        strip.text = (element_text(family ="sans",size=16,color = "black")))
+barCondAccGLMM
+
+ggsave(filename="Covid Corr Cond Acc GLMM.png", plot=barCondAccGLMM, device="png", height=5, width=5, units="in", dpi=500)
+```
+
+```{r Strategy GLMM all 8 items, echo=FALSE}
+
+# WNB
+
+# All condition comparisons
+glmWNBstratall <- glmer(WNB ~ Cond_v2 + WNB_pretest + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmWNBstratl)
+summary(glmWNBstratall) # NL outperforms all other conditions
+car::Anova(glmWNBstratall, test = "Chisq", type = 3)
+
+# Model with dummy coded conditions (NL is ref)
+
+glmWNBstratall <- glmer(WNB ~ NLvsIA + NLvsRL + NLvsNoModel + WNB_pretest + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + (1|item) + (1|id),
+             family=binomial(link="logit"),
+             glmerControl(optimizer="Nelder_Mead"),
+             data=dmWNBstratl)
+summary(glmWNBstratall) # model failed to converge
+
+# Trying different optimizer
+glmWNBstratall <- glmer(WNB ~  NLvsIA + NLvsRL + NLvsNoModel + WNB_pretest + PAE + EQ + OGL + NSR + TORR + SGL + MA + MAQ + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmWNBstratl)
+summary(glmWNBstratall) # RL and IA don't differ from No Model
+car::Anova(glmWNBstratall)
+exp(fixef(glmWNBstratall))
+confint.merMod(glmWNBstratall, method = "Wald")
+
+# HM
+
+glmHMstratall <- glmer(HM ~ Cond_v2 + HM_pretest + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmHMstratl)
+summary(glmHMstratall) # no model had more HM strategies than NL?
+
+# Vis
+
+glmVisstratall <- glmer(Vis ~ Cond_v2 + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmVisstratl)
+summary(glmVisstratall) # convergence issues
+
+# NonNum
+
+glmNonNumstratall <- glmer(NonNum ~ Cond_v2 + NonNum_pretest + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + (1|id) + (1|item),
+              family=binomial(link="logit"),
+              glmerControl(optimizer= "optimx",optCtrl = list(method = "nlminb", starttests = FALSE, kkt = FALSE)),
+              data=dmNonNumstratl)
+summary(glmNonNumstratall) # IA more than NL
+
+```
+
+```{r Health cognition analyses, echo=FALSE}
+
+corr.test(d2$trait_anx_sum,d2$risk_self_avg) # r = .01, p = .86
+corr.test(d2$trait_anx_sum,d2$risk_other_avg) # r = .20, p = .00
+corr.test(d2$trait_anx_sum,d2$worry_self) # r = .20, p = .00
+corr.test(d2$trait_anx_sum,d2$worry_other) # r = .18, p = .00
+corr.test(d2$trait_anx_sum,d2$severity) # r = .12, p = .06
+corr.test(d2$trait_anx_sum,d2$healthbeh_mean) # r = .07, p = .26
+
+# Testing whether DM Acc (6 items) predicts health cog 
+
+# COVID likelihood for self
+riskself<-lm(risk_self_avg ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + ksu + ANX,
+              data = d2)
+print(summary(riskself))
+vif(riskself)
+
+# COVID likelihood for other
+riskother<-lm(risk_other_avg ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + ksu + ANX,
+               data = d2)
+print(summary(riskother))
+
+# COVID worry for self
+worryself<-lm(worry_self ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + ksu + ANX,
+               data = d2)
+print(summary(worryself))
+
+# COVID worry for other
+worryother<-lm(worry_other ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + ksu + ANX,
+                data = d2)
+print(summary(worryother))
+
+# COVID severity (aggregated)
+severityagg<-lm(severity ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + ksu + ANX,
+                 data = d2)
+print(summary(severityagg))
+
+# COVID health behavior intentions
+health<-lm(healthbeh_mean ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + ksu + ANX,
+            data = d2)
+print(summary(health))
+
+# stargazer(riskself,riskother, worryself, worryother, severityagg,health,type="text", digits=2,
+#           out="HealthRegressions6item.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+
+# CIs
+
+confint(riskself)
+confint(riskother) 
+confint(worryself) 
+confint(worryother)
+confint(severityagg) 
+confint(health) 
+
+# Adding fraction-specific MA and MAQ
+
+# COVID likelihood for self
+riskselffr<-lm(risk_self_avg ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA_F + MAQ_F + TORR + ksu + ANX,
+              data = d2)
+print(summary(riskselffr))
+vif(riskself)
+
+# COVID likelihood for other
+riskotherfr<-lm(risk_other_avg ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA_F + MAQ_F + TORR + ksu + ANX,
+               data = d2)
+print(summary(riskotherfr))
+
+# COVID worry for self
+worryselffr<-lm(worry_self ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA_F + MAQ_F + TORR + ksu + ANX,
+               data = d2)
+print(summary(worryselffr))
+
+# COVID worry for other
+worryotherfr<-lm(worry_other ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA_F + MAQ_F + TORR + ksu + ANX,
+                data = d2)
+print(summary(worryotherfr))
+
+# COVID severity (aggregated)
+severityaggfr<-lm(severity ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA_F + MAQ_F + TORR + ksu + ANX,
+                 data = d2)
+print(summary(severityaggfr))
+
+# COVID health behavior intentions
+healthfr<-lm(healthbeh_mean ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA_F + MAQ_F + TORR + ksu + ANX,
+            data = d2)
+print(summary(healthfr))
+
+# stargazer(riskselffr,riskotherfr, worryselffr, worryotherfr, severityaggfr,healthfr,type="text", digits=2,
+#           out="HealthRegressions6itemfr.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+
+# CIs
+
+confint(riskselffr)
+confint(riskotherfr) 
+confint(worryselffr) 
+confint(worryotherfr)
+confint(severityaggfr) 
+confint(healthfr) 
+
+```
+
+```{r Testing fraction-specific MA and MAQ, echo=FALSE}
+
+# COVID likelihood for self
+riskselffr<-lm(risk_self_avg ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA_F + MAQ_F+ TORR + ksu + ANX,
+              data = d2)
+print(summary(riskselffr))
+anova(riskself,riskselffr) # no difference in model fit
+
+# COVID likelihood for other
+riskotherfr<-lm(risk_other_avg ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA_F + MAQ_F+ TORR + ksu + ANX,
+               data = d2)
+print(summary(riskotherfr))
+anova(riskother,riskotherfr) # no difference in model fit
+
+# COVID worry for self
+worryselffr<-lm(worry_self ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA_F + MAQ_F+ TORR + ksu + ANX,
+               data = d2)
+print(summary(worryselffr))
+anova(worryself,worryselffr) #?
+
+# COVID worry for other
+worryotherfr<-lm(worry_other ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA_F + MAQ_F+ TORR + ksu + ANX,
+                data = d2)
+print(summary(worryotherfr))
+anova(worryother,worryotherfr) #?
+
+# COVID severity (aggregated)
+severityaggfr<-lm(severity ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA_F + MAQ_F+ TORR + ksu + ANX,
+                 data = d2)
+print(summary(severityaggfr)) 
+anova(severityagg,severityaggfr) # no difference in model fit
+
+# COVID health behavior intentions
+healthfr<-lm(healthbeh_mean ~ dm_sum_limit + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA_F + MAQ_F+ TORR + ksu + ANX,
+            data = d2)
+print(summary(healthfr))
+anova(health,healthfr) # no difference in model fit
+
+# stargazer(riskselffr,riskotherfr, worryselffr, worryotherfr, severityaggfr,healthfr,type="text", digits=2,
+#           out="HealthRegressions6item_FR.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+
+```
+
+# Preregistered Models for Accuracy and Strategies
+
+```{r Accuracy preregistered models, echo=FALSE}
+## Initial Models (gender, EQ, MA) ####
+
+d2$Cond_v2 <- relevel(d2$Cond_v, ref="NL")
+
+## PRETEST
+
+logmod0 <- glm(dm_pretest_cor ~ Cond_v + male + EQ + MA,
+               data = d2, family=binomial(link="logit"))
+summary(logmod0)
+Anova(logmod0, test.statistic = "LR")
+Anova(logmod0, test.statistic = "Wald")
+
+pretestinit<-as.data.frame(exp(cbind(OR = coef(logmod0), confint(logmod0,level = 0.95))), digits=3)
+
+logmod02 <- glm(dm_pretest_cor ~ Cond_v2 + male + EQ + MA,
+               data = d2, family=binomial(link="logit"))
+summary(logmod0)
+Anova(logmod0, test.statistic = "LR")
+Anova(logmod0, test.statistic = "Wald")
+
+pretestinit<-as.data.frame(exp(cbind(OR = coef(logmod0), confint(logmod0,level = 0.95))), digits=3)
+
+## UNIVERSITIES 
+
+logmoduni <- glm(dm_uni_cor ~ Cond_v + male + EQ + MA,
+                 data = d2, family=binomial(link="logit"))
+summary(logmoduni)
+uniinit<-as.data.frame(exp(cbind(OR = coef(logmoduni), confint(logmoduni))), digits=3)
+
+# with NL as reference
+
+logmoduni2 <- glm(dm_uni_cor ~ Cond_v2 + male + EQ + MA,
+                  data = d2, family=binomial(link="logit"))
+summary(logmoduni2)
+print(exp(cbind(OR = coef(logmoduni2), confint(logmoduni2))), digits=3)
+
+## BOWLS
+
+logmodbowl <- glm(dm_bowls_cor ~ Cond_v + male + EQ + MA,
+                  data = d2, family=binomial(link="logit"))
+print(summary(logmodbowl), digits=3)
+bowlinit<-as.data.frame(exp(cbind(OR = coef(logmodbowl), confint(logmodbowl))), digits=3)
+
+# with NL as reference
+
+logmodbowl2 <- glm(dm_bowls_cor ~ Cond_v2 + male + EQ + MA,
+                   data = d2, family=binomial(link="logit"))
+print(summary(logmodbowl2), digits=3)
+print(exp(cbind(OR = coef(logmodbowl2), confint(logmodbowl2))), digits=3)
+
+## GLOBAL
+
+logmodglobal <- glm(dm_global_cor ~ Cond_v + male + EQ + MA,
+                    data = d2, family=binomial(link="logit"))
+
+print(summary(logmodglobal), digits=3)
+globalinit<-as.data.frame(exp(cbind(OR = coef(logmodglobal), confint(logmodglobal))), digits=3)
+
+# with NL as reference
+
+logmodglobal2 <- glm(dm_global_cor ~ Cond_v2 + male + EQ + MA,
+                     data = d2, family=binomial(link="logit"))
+print(summary(logmodglobal2), digits=3)
+print(exp(cbind(OR = coef(logmodglobal2), confint(logmodglobal2))), digits=3)
+
+## ANOTHER
+
+logmodanother <- glm(dm_another_cor ~ Cond_v + male + EQ + MA,
+                     data = d2, family=binomial(link="logit"))
+
+print(summary(logmodanother), digits=3)
+anotherinit<-as.data.frame(exp(cbind(OR = coef(logmodanother), confint(logmodanother))), digits=3)
+
+# with NL as reference
+
+logmodanother2 <- glm(dm_another_cor ~ Cond_v2 + male + EQ + MA,
+                      data = d2, family=binomial(link="logit"))
+print(summary(logmodanother2), digits=3)
+print(exp(cbind(OR = coef(logmodanother2), confint(logmodanother2))), digits=3)
+
+## WW1
+
+logmodww1 <- glm(dm_ww1_cor ~ Cond_v + male + EQ + MA,
+                 data = d2, family=binomial(link="logit"))
+print(summary(logmodww1))
+ww1init<-as.data.frame(exp(cbind(OR = coef(logmodww1), confint(logmodww1))), digits = 3)
+
+# with NL as reference
+
+logmodww12 <- glm(dm_ww1_cor ~ Cond_v2 + male + EQ + MA,
+                  data = d2, family=binomial(link="logit"))
+print(summary(logmodww12), digits=3)
+print(exp(cbind(OR = coef(logmodww12), confint(logmodww12))), digits = 3)
+
+## MARCH
+
+logmodmarch <- glm(dm_march_cor ~ Cond_v + male + EQ + MA,
+                   data = d2, family=binomial(link="logit"))
+print(summary(logmodmarch))
+marchinit<-as.data.frame(exp(cbind(OR = coef(logmodmarch), confint(logmodmarch))), digits = 3)
+
+# with NL as reference
+
+logmodmarch2 <- glm(dm_march_cor ~ Cond_v2 + male + EQ + MA,
+                    data = d2, family=binomial(link="logit"))
+print(summary(logmodmarch2), digits=3)
+print(exp(cbind(OR = coef(logmodmarch2), confint(logmodmarch2))), digits = 3)
+
+## AGES
+
+logmodages <- glm(dm_ages_cor ~ Cond_v + male + EQ + MA,
+                  data = d2, family=binomial(link="logit"))
+print(summary(logmodages))
+agesinit<-as.data.frame(exp(cbind(OR = coef(logmodages), confint(logmodages))), digits = 3)
+
+# with NL as reference
+
+logmodages2 <- glm(dm_ages_cor ~ Cond_v2 + male + EQ + MA,
+                   data = d2, family=binomial(link="logit"))
+print(summary(logmodages2), digits=3)
+print(exp(cbind(OR = coef(logmodages2), confint(logmodages2))), digits = 3)
+
+## OCT
+
+logmodoct <- glm(dm_oct_cor ~ Cond_v + male + EQ + MA,
+                 data = d2, family=binomial(link="logit"))
+print(summary(logmodoct))
+octinit<-as.data.frame(exp(cbind(OR = coef(logmodoct), confint(logmodoct))), digits = 3)
+
+# with NL as reference
+
+logmodoct2 <- glm(dm_oct_cor ~ Cond_v2 + male + EQ + MA,
+                  data = d2, family=binomial(link="logit"))
+print(summary(logmodoct2), digits=3)
+print(exp(cbind(OR = coef(logmodoct2), confint(logmodoct2))), digits = 3)
+
+# stargazer(logmod0, logmodbowl,logmodanother, logmodglobal, logmodmarch, logmodoct, logmoduni,logmodages,logmodww1,type="text", digits=2,
+#           out="ByItemRegressionInitial.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+
+# stargazer(logmod02,logmodbowl2,logmodanother2, logmodglobal2, logmodmarch2, logmodoct2, logmoduni2,logmodages2,logmodww12,type="text", digits=2,
+#           out="ByItemRegressionInitialNL.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+
+
+# pretestinit$Item<-"Pretest"
+# agesinit$Item<-"Ages"
+# anotherinit$Item<-"Another"
+# bowlinit$Item<-"Bowls"
+# globalinit$Item<-"Global"
+# marchinit$Item<-"March"
+# octinit$Item<-"Oct"
+# uniinit$Item<-"Uni"
+# ww1init$Item<-"WW1"
+# 
+# inittable<-rbind(pretestinit,agesinit,anotherinit,bowlinit,globalinit,marchinit,octinit,uniinit,ww1init)
+
+#write_csv(inittable, "PreregInitialModels.csv")
+
+## Prereg Full Models (gender, EQ, MA, pretest, age, PAE) ####
+
+## UNIVERSITIES 
+
+logmodunifull <- glm(dm_uni_cor ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                     data = d2, family=binomial(link="logit"))
+summary(logmodunifull)
+unifull<-as.data.frame(exp(cbind(OR = coef(logmodunifull), confint(logmodunifull))), digits=3)
+
+# with NL as reference group
+
+logmodunifull2 <- glm(dm_uni_cor ~ Cond_v2 + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                      data = d2, family=binomial(link="logit"))
+summary(logmodunifull2)
+unifull<-as.data.frame(exp(cbind(OR = coef(logmodunifull2), confint(logmodunifull2))), digits=2)
+
+
+## BOWLS 
+
+logmodbowlfull <- glm(dm_bowls_cor ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                      data = d2, family=binomial(link="logit"))
+print(summary(logmodbowlfull), digits=3)
+bowlfull<-as.data.frame(exp(cbind(OR = coef(logmodbowlfull), confint(logmodbowlfull))), digits=3)
+
+# with NL as reference group
+
+logmodbowlfull2 <- glm(dm_bowls_cor ~ Cond_v2 + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                       data = d2, family=binomial(link="logit"))
+print(summary(logmodbowlfull2), digits=3)
+
+## Global 
+
+logmodglobalfull <- glm(dm_global_cor ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                        data = d2, family=binomial(link="logit"))
+
+print(summary(logmodglobalfull), digits=3)
+globalfull<-as.data.frame(exp(cbind(OR = coef(logmodglobalfull), confint(logmodglobalfull))), digits=3)
+
+# with NL as reference group
+
+logmodglobalfull2 <- glm(dm_global_cor ~ Cond_v2 + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                         data = d2, family=binomial(link="logit"))
+print(summary(logmodglobalfull2), digits=3)
+
+## ANOTHER 
+
+logmodanotherfull <- glm(dm_another_cor ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                         data = d2, family=binomial(link="logit"))
+
+print(summary(logmodanotherfull), digits=3)
+anotherfull<-as.data.frame(exp(cbind(OR = coef(logmodanotherfull), confint(logmodanotherfull))), digits=3)
+
+# with NL as reference group
+
+logmodanotherfull2 <- glm(dm_another_cor ~ Cond_v2 + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                          data = d2, family=binomial(link="logit"))
+print(summary(logmodanotherfull2), digits=3)
+
+## World War I 
+
+logmodww1full <- glm(dm_ww1_cor ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                     data = d2, family=binomial(link="logit"))
+print(summary(logmodww1full))
+ww1full<-as.data.frame(exp(cbind(OR = coef(logmodww1full), confint(logmodww1full))), digits = 3)
+
+# with NL as reference group
+
+logmodww1full2 <- glm(dm_ww1_cor ~ Cond_v2 + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                      data = d2, family=binomial(link="logit"))
+print(summary(logmodww1full2), digits=3)
+print(exp(cbind(OR = coef(logmodww1full2), confint(logmodww1full2))), digits = 3)
+
+## MARCH
+
+logmodmarchfull <- glm(dm_march_cor ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                       data = d2, family=binomial(link="logit"))
+print(summary(logmodmarchfull))
+marchfull<-as.data.frame(exp(cbind(OR = coef(logmodmarchfull), confint(logmodmarchfull))), digits = 3)
+
+# with NL as reference group
+
+logmodmarchfull2 <- glm(dm_march_cor ~ Cond_v2 + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                        data = d2, family=binomial(link="logit"))
+print(summary(logmodmarchfull2), digits=3)
+print(exp(cbind(OR = coef(logmodmarchfull2), confint(logmodmarchfull2))), digits = 3)
+
+## AGES 
+
+logmodagesfull <- glm(dm_ages_cor ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                      data = d2, family=binomial(link="logit"))
+print(summary(logmodagesfull))
+agesfull<-as.data.frame(exp(cbind(OR = coef(logmodagesfull), confint(logmodagesfull))), digits = 3)
+
+# with NL as reference group
+
+logmodagesfull2 <- glm(dm_ages_cor ~ Cond_v2 + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                       data = d2, family=binomial(link="logit"))
+print(summary(logmodagesfull2), digits=3)
+print(exp(cbind(OR = coef(logmodagesfull2), confint(logmodagesfull2))), digits = 3)
+
+## October 
+
+logmodoctfull <- glm(dm_oct_cor ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                     data = d2, family=binomial(link="logit"))
+print(summary(logmodoctfull))
+octfull<-as.data.frame(exp(cbind(OR = coef(logmodoctfull), confint(logmodoctfull))), digits = 3)
+
+# with NL as reference group
+
+logmodoctfull2 <- glm(dm_oct_cor ~ Cond_v2 + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                      data = d2, family=binomial(link="logit"))
+print(summary(logmodoctfull2), digits=3)
+print(exp(cbind(OR = coef(logmodoctfull2), confint(logmodoctfull2))), digits = 3)
+
+# stargazer(logmodbowlfull,logmodanotherfull, logmodglobalfull, logmodmarchfull, logmodoctfull, logmodunifull,logmodagesfull,logmodww1full,type="text", digits=2,
+#           out="ByItemRegressionFull.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+# 
+# stargazer(logmodbowlfull2,logmodanotherfull2, logmodglobalfull2, logmodmarchfull2, logmodoctfull2, logmodunifull2,logmodagesfull2,logmodww1full2,type="text", digits=2,
+#           out="ByItemRegressionFullNL.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+
+# agesfull$Item<-"Ages"
+# anotherfull$Item<-"Another"
+# bowlfull$Item<-"Bowls"
+# globalfull$Item<-"Global"
+# marchfull$Item<-"March"
+# octfull$Item<-"Oct"
+# unifull$Item<-"Uni"
+# ww1full$Item<-"WW1"
+# 
+# fulltable<-rbind(agesfull,anotherfull,bowlfull,globalfull,marchfull,octfull,unifull,ww1full)
+# 
+# write_csv(fulltable, "PreregFullModels.csv")
+
+## Models Other Predictors (SGL, OGL, NSR, TORR) ####
+
+## PRETEST
+
+logmodpretestother <- glm(dm_pretest_cor ~ SGL + OGL + NSR + TORR,
+                          data = d2, family=binomial(link="logit"))
+summary(logmodpretestother)
+pretestother<-as.data.frame(exp(cbind(OR = coef(logmodpretestother), confint(logmodpretestother))), digits=3)
+
+
+## UNIVERSITIES 
+
+logmoduniother <- glm(dm_uni_cor ~ SGL + OGL + NSR + TORR,
+                      data = d2, family=binomial(link="logit"))
+summary(logmoduniother)
+uniother<-as.data.frame(exp(cbind(OR = coef(logmoduniother), confint(logmoduniother))), digits=3)
+
+## BOWLS 
+
+logmodbowlother <- glm(dm_bowls_cor ~ SGL + OGL + NSR + TORR,
+                       data = d2, family=binomial(link="logit"))
+print(summary(logmodbowlother), digits=3)
+bowlother<-as.data.frame(exp(cbind(OR = coef(logmodbowlother), confint(logmodbowlother))), digits=3)
+
+## Global 
+
+logmodglobalother <- glm(dm_global_cor ~ SGL + OGL + NSR + TORR,
+                         data = d2, family=binomial(link="logit"))
+
+print(summary(logmodglobalother), digits=3)
+globalother<-as.data.frame(exp(cbind(OR = coef(logmodglobalother), confint(logmodglobalother))), digits=3)
+
+## ANOTHER 
+
+logmodanotherother <- glm(dm_another_cor ~ SGL + OGL + NSR + TORR,
+                          data = d2, family=binomial(link="logit"))
+
+print(summary(logmodanotherother), digits=3)
+anotherother<-as.data.frame(exp(cbind(OR = coef(logmodanotherother), confint(logmodanotherother))), digits=3)
+
+## World War I 
+
+logmodww1other <- glm(dm_ww1_cor ~ SGL + OGL + NSR + TORR,
+                      data = d2, family=binomial(link="logit"))
+print(summary(logmodww1other))
+ww1other<-as.data.frame(exp(cbind(OR = coef(logmodww1other), confint(logmodww1other))), digits = 3)
+
+## MARCH
+
+logmodmarchother <- glm(dm_march_cor ~ SGL + OGL + NSR + TORR,
+                        data = d2, family=binomial(link="logit"))
+print(summary(logmodmarchother))
+marchother<-as.data.frame(exp(cbind(OR = coef(logmodmarchother), confint(logmodmarchother))), digits = 3)
+
+## AGES 
+
+logmodagesother <- glm(dm_ages_cor ~ SGL + OGL + NSR + TORR,
+                       data = d2, family=binomial(link="logit"))
+print(summary(logmodagesother))
+agesother<-as.data.frame(exp(cbind(OR = coef(logmodagesother), confint(logmodagesother))), digits = 3)
+
+## October 
+
+logmodoctother <- glm(dm_oct_cor ~ SGL + OGL + NSR + TORR,
+                      data = d2, family=binomial(link="logit"))
+print(summary(logmodoctother))
+octother<-as.data.frame(exp(cbind(OR = coef(logmodoctother), confint(logmodoctother))), digits = 3)
+
+# stargazer(logmodpretestother,logmodbowlother,logmodanotherother, logmodglobalother, logmodmarchother, logmodoctother, logmoduniother,logmodagesother,logmodww1other,type="text", digits=2,
+#           out="ByItemRegressionOther.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+
+# pretestother$Item<-"Pretest"
+# agesother$Item<-"Ages"
+# anotherother$Item<-"Another"
+# bowlother$Item<-"Bowls"
+# globalother$Item<-"Global"
+# marchother$Item<-"March"
+# octother$Item<-"Oct"
+# uniother$Item<-"Uni"
+# ww1other$Item<-"WW1"
+# 
+# othertable<-rbind(pretestother,agesother,anotherother,bowlother,globalother,marchother,octother,uniother,ww1other)
+# 
+# write_csv(othertable, "PreregOtherModels.csv")
+
+
+
+```
+
+```{r Strategy preregistered models, echo=FALSE}
+## Initial Models (gender, EQ, MA) ####
+
+## PRETEST
+
+logmodstrat0 <- glm(WNB_pretest ~ Cond_v + male + EQ + MA,
+                    data = d2, family=binomial(link="logit"))
+summary(logmodstrat0)
+
+preteststratinit<-as.data.frame(exp(cbind(OR = coef(logmodstrat0), confint(logmodstrat0,level = 0.95))), digits=3)
+
+## UNIVERSITIES 
+
+logmodunistratinit <- glm(WNB_uni ~ Cond_v + male + EQ + MA,
+                          data = d2, family=binomial(link="logit"))
+summary(logmodunistratinit)
+unistratinit<-as.data.frame(exp(cbind(OR = coef(logmodunistratinit), confint(logmodunistratinit))), digits=2)
+
+## BOWLS
+
+logmodbowlstratinit <- glm(WNB_bowls ~ Cond_v + male + EQ + MA,
+                           data = d2, family=binomial(link="logit"))
+print(summary(logmodbowlstratinit), digits=3)
+bowlstratinit<-as.data.frame(exp(cbind(OR = coef(logmodbowlstratinit), confint(logmodbowlstratinit))), digits=2)
+
+## GLOBAL
+
+logmodglobalstratinit <- glm(WNB_global ~ Cond_v + male + EQ + MA,
+                             data = d2, family=binomial(link="logit"))
+
+print(summary(logmodglobalstratinit), digits=3)
+globalstratinit<-as.data.frame(exp(cbind(OR = coef(logmodglobalstratinit), confint(logmodglobalstratinit))), digits=2)
+
+## ANOTHER
+
+logmodanotherstratinit <- glm(WNB_another ~ Cond_v + male + EQ + MA,
+                              data = d2, family=binomial(link="logit"))
+
+print(summary(logmodanotherstratinit), digits=3)
+anotherstratinit<-as.data.frame(exp(cbind(OR = coef(logmodanotherstratinit), confint(logmodanotherstratinit))), digits=2)
+
+## WW1
+
+logmodww1stratinit <- glm(WNB_ww1 ~ Cond_v + male + EQ + MA,
+                          data = d2, family=binomial(link="logit"))
+print(summary(logmodww1stratinit))
+ww1stratinit<-as.data.frame(exp(cbind(OR = coef(logmodww1stratinit), confint(logmodww1stratinit))), digits = 3)
+
+## MARCH
+
+logmodmarchstratinit <- glm(WNB_march ~ Cond_v + male + EQ + MA,
+                            data = d2, family=binomial(link="logit"))
+print(summary(logmodmarchstratinit))
+marchstratinit<-as.data.frame(exp(cbind(OR = coef(logmodmarchstratinit), confint(logmodmarchstratinit))), digits = 3)
+
+## AGES
+
+logmodagesstratinit <- glm(WNB_ages ~ Cond_v + male + EQ + MA,
+                           data = d2, family=binomial(link="logit"))
+print(summary(logmodagesstratinit))
+agesstratinit<-as.data.frame(exp(cbind(OR = coef(logmodagesstratinit), confint(logmodagesstratinit))), digits = 3)
+
+## OCT
+
+logmodoctstratinit <- glm(WNB_oct ~ Cond_v + male + EQ + MA,
+                          data = d2, family=binomial(link="logit"))
+print(summary(logmodoctstratinit))
+octstratinit<-as.data.frame(exp(cbind(OR = coef(logmodoctstratinit), confint(logmodoctstratinit))), digits = 3)
+
+
+# 
+# stargazer(logmodstrat0, logmodbowlstratinit,logmodanotherstratinit, logmodglobalstratinit, logmodmarchstratinit, logmodoctstratinit, logmodunistratinit,logmodagesstratinit,logmodww1stratinit,type="text", digits=2,
+#           out="ByItemRegressionInitialStrat.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+
+# preteststratinit$Item<-"Pretest"
+# agesstratinit$Item<-"Ages"
+# anotherstratinit$Item<-"Another"
+# bowlstratinit$Item<-"Bowls"
+# globalstratinit$Item<-"Global"
+# marchstratinit$Item<-"March"
+# octstratinit$Item<-"Oct"
+# unistratinit$Item<-"Uni"
+# ww1stratinit$Item<-"WW1"
+# 
+# stratinittable<-rbind(preteststratinit,agesstratinit,anotherstratinit,bowlstratinit,globalstratinit,marchstratinit,octstratinit,unistratinit,ww1stratinit)
+# 
+# write_csv(stratinittable, "PreregInitialModelsStrat.csv")
+
+## Full Models (gender, EQ, MA, pretest, age, PAE) ####
+
+## UNIVERSITIES 
+
+logmodunistratfull <- glm(WNB_uni ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                          data = d2, family=binomial(link="logit"))
+summary(logmodunistratfull)
+unistratfull<-as.data.frame(exp(cbind(OR = coef(logmodunistratfull), confint(logmodunistratfull))), digits=3)
+
+## BOWLS 
+
+logmodbowlstratfull <- glm(WNB_bowls ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                           data = d2, family=binomial(link="logit"))
+print(summary(logmodbowlstratfull), digits=3)
+bowlstratfull<-as.data.frame(exp(cbind(OR = coef(logmodbowlstratfull), confint(logmodbowlstratfull))), digits=3)
+
+## Global 
+
+logmodglobalstratfull <- glm(WNB_global ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                             data = d2, family=binomial(link="logit"))
+
+print(summary(logmodglobalstratfull), digits=3)
+globalstratfull<-as.data.frame(exp(cbind(OR = coef(logmodglobalstratfull), confint(logmodglobalstratfull))), digits=3)
+
+## ANOTHER 
+
+logmodanotherstratfull <- glm(WNB_another ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                              data = d2, family=binomial(link="logit"))
+
+print(summary(logmodanotherstratfull), digits=3)
+anotherstratfull<-as.data.frame(exp(cbind(OR = coef(logmodanotherstratfull), confint(logmodanotherstratfull))), digits=3)
+
+## World War I 
+
+logmodww1stratfull <- glm(WNB_ww1 ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                          data = d2, family=binomial(link="logit"))
+print(summary(logmodww1stratfull))
+ww1stratfull<-as.data.frame(exp(cbind(OR = coef(logmodww1stratfull), confint(logmodww1stratfull))), digits = 3)
+
+## MARCH
+
+logmodmarchstratfull <- glm(WNB_march ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                            data = d2, family=binomial(link="logit"))
+print(summary(logmodmarchstratfull))
+marchstratfull<-as.data.frame(exp(cbind(OR = coef(logmodmarchstratfull), confint(logmodmarchstratfull))), digits = 3)
+
+## AGES 
+
+logmodagesstratfull <- glm(WNB_ages ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                           data = d2, family=binomial(link="logit"))
+print(summary(logmodagesstratfull))
+agesstratfull<-as.data.frame(exp(cbind(OR = coef(logmodagesstratfull), confint(logmodagesstratfull))), digits = 3)
+
+## October 
+
+logmodoctstratfull <- glm(WNB_oct ~ Cond_v + male + EQ + MA + dm_pretest_cor + Age + PAE,
+                          data = d2, family=binomial(link="logit"))
+print(summary(logmodoctstratfull))
+octstratfull<-as.data.frame(exp(cbind(OR = coef(logmodoctstratfull), confint(logmodoctstratfull))), digits = 3)
+
+
+# stargazer(logmodbowlstratfull,logmodanotherstratfull, logmodglobalstratfull, logmodmarchstratfull, logmodoctstratfull, logmodunistratfull,logmodagesstratfull,logmodww1stratfull,type="text", digits=2,
+#           out="ByItemRegressionFullStrat.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+
+# agesstratfull$Item<-"Ages"
+# anotherstratfull$Item<-"Another"
+# bowlstratfull$Item<-"Bowls"
+# globalstratfull$Item<-"Global"
+# marchstratfull$Item<-"March"
+# octstratfull$Item<-"Oct"
+# unistratfull$Item<-"Uni"
+# ww1stratfull$Item<-"WW1"
+# 
+# stratfulltable<-rbind(agesstratfull,anotherstratfull,bowlstratfull,globalstratfull,marchstratfull,octstratfull,unistratfull,ww1stratfull)
+# 
+# write_csv(stratfulltable, "PreregFullModelsStrat.csv")
+
+## Models Other Predictors (SGL, OGL, NSR, TORR) ####
+
+## PRETEST 
+
+logmodpreteststrat <- glm(WNB_pretest ~ SGL + OGL + NSR + TORR,
+                          data = d2, family=binomial(link="logit"))
+summary(logmodpreteststrat)
+preteststratother<-as.data.frame(exp(cbind(OR = coef(logmodpreteststrat), confint(logmodpreteststrat))), digits=3)
+
+## UNIVERSITIES 
+
+logmodunistrat <- glm(WNB_uni ~ SGL + OGL + NSR + TORR,
+                      data = d2, family=binomial(link="logit"))
+summary(logmodunistrat)
+unistratother<-as.data.frame(exp(cbind(OR = coef(logmodunistrat), confint(logmodunistrat))), digits=3)
+
+## BOWLS 
+
+logmodbowlstrat <- glm(WNB_bowls ~ SGL + OGL + NSR + TORR,
+                       data = d2, family=binomial(link="logit"))
+print(summary(logmodbowlstrat), digits=3)
+bowlstratother<-as.data.frame(exp(cbind(OR = coef(logmodbowlstrat), confint(logmodbowlstrat))), digits=2)
+
+## Global 
+
+logmodglobalstrat <- glm(WNB_global ~ SGL + OGL + NSR + TORR,
+                         data = d2, family=binomial(link="logit"))
+
+print(summary(logmodglobalstrat), digits=3)
+globalstratother<-as.data.frame(exp(cbind(OR = coef(logmodglobalstrat), confint(logmodglobalstrat))), digits=2)
+
+## ANOTHER 
+
+logmodanotherstrat <- glm(WNB_another ~ SGL + OGL + NSR + TORR,
+                          data = d2, family=binomial(link="logit"))
+
+print(summary(logmodanotherstrat), digits=3)
+anotherstratother<-as.data.frame(exp(cbind(OR = coef(logmodanotherstrat), confint(logmodanotherstrat))), digits=2)
+
+## World War I 
+
+logmodww1strat <- glm(WNB_ww1 ~ SGL + OGL + NSR + TORR,
+                      data = d2, family=binomial(link="logit"))
+print(summary(logmodww1strat))
+ww1stratother<-as.data.frame(exp(cbind(OR = coef(logmodww1strat), confint(logmodww1strat))), digits = 3)
+
+## MARCH
+
+logmodmarchstrat <- glm(WNB_march ~ SGL + OGL + NSR + TORR,
+                        data = d2, family=binomial(link="logit"))
+print(summary(logmodmarchstrat))
+marchstratother<-as.data.frame(exp(cbind(OR = coef(logmodmarchstrat), confint(logmodmarchstrat))), digits = 3)
+
+## AGES 
+
+logmodagesstrat <- glm(WNB_ages ~ SGL + OGL + NSR + TORR,
+                       data = d2, family=binomial(link="logit"))
+print(summary(logmodagesstrat))
+agesstratother<-as.data.frame(exp(cbind(OR = coef(logmodagesstrat), confint(logmodagesstrat))), digits = 3)
+
+## October 
+
+logmodoctstrat <- glm(WNB_oct ~ SGL + OGL + NSR + TORR,
+                      data = d2, family=binomial(link="logit"))
+print(summary(logmodoctstrat))
+octstratother<-as.data.frame(exp(cbind(OR = coef(logmodoctstrat), confint(logmodoctstrat))), digits = 3)
+
+# stargazer(logmodpreteststrat,logmodbowlstrat,logmodanotherstrat, logmodglobalstrat, logmodmarchstrat, logmodoctstrat, logmodunistrat,logmodagesstrat,logmodww1strat,type="text", digits=2,
+#           out="ByItemRegressionStrat.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+# 
+# preteststratother$Item<-"Pretest"
+# agesstratother$Item<-"Ages"
+# anotherstratother$Item<-"Another"
+# bowlstratother$Item<-"Bowls"
+# globalstratother$Item<-"Global"
+# marchstratother$Item<-"March"
+# octstratother$Item<-"Oct"
+# unistratother$Item<-"Uni"
+# ww1stratother$Item<-"WW1"
+# 
+# stratothertable<-rbind(preteststratother,agesstratother,anotherstratother,bowlstratother,globalstratother,marchstratother,octstratother,unistratother,ww1stratother)
+# 
+# write_csv(stratothertable, "PreregOtherModelsStrat.csv")
+```
+
+```{r Health Cog by condition, echo=FALSE}
+
+# Testing whether DM Acc (6 items) predicts health cog 
+
+# COVID likelihood for self
+riskselfcond<-lm(risk_self_avg ~ Cond_v + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + ksu + ANX,
+              data = d2)
+print(summary(riskselfcond))
+
+# COVID likelihood for other
+riskothercond<-lm(risk_other_avg ~ Cond_v + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + ksu + ANX,
+               data = d2)
+print(summary(riskothercond))
+
+# COVID worry for self
+worryselfcond<-lm(worry_self ~ Cond_v + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + ksu + ANX,
+               data = d2)
+print(summary(worryselfcond))
+
+# COVID worry for other
+worryothercond<-lm(worry_other ~ Cond_v + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + ksu + ANX,
+                data = d2)
+print(summary(worryothercond))
+
+# COVID severity (aggregated)
+severityaggcond<-lm(severity ~ Cond_v + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + ksu + ANX,
+                 data = d2)
+print(summary(severityaggcond))
+
+# COVID health behavior intentions
+healthcond<-lm(healthbeh_mean ~ Cond_v + dm_pretest_cor + PAE + EQ + OGL + NSR + SGL + MA + MAQ + TORR + ksu + ANX,
+            data = d2)
+print(summary(healthcond))
+
+# stargazer(riskselfcond,riskothercond, worryselfcond, worryothercond, severityaggcond,healthcond,type="text", digits=2,
+#           out="HealthRegressionsCond.htm",intercept.bottom = FALSE, single.row=TRUE, star.cutoffs=c(.05,.01,.001), notes.append = FALSE, header=FALSE)
+
+# CIs
+
+confint(riskselfcond)
+confint(riskothercond) 
+confint(worryselfcond) 
+confint(worryothercond)
+confint(severityaggcond) 
+confint(healthcond) 
+
+```
+
