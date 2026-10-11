@@ -1,133 +1,132 @@
-SN	AMAS_Comp	Bio_Sex	Gender	Race	Race_13_TEXT	Age	EdLev	HouseInc	Diag_Stat	Diag_Age	pLastCasto	HCs1Casto	HCs1Casto_3_TEXT	HCs2Casto	HCs2Casto_7_TEXT	HCb1Casto	HCb2Casto
-1	24	Male	Male	White	NA	27	HS diploma/GED	$35,000 - $49,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-2	13	Male	Male	White	NA	20	HS diploma/GED	$50,000 - $74,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-3	30	Female	Female	Pacific Islander,East Asian,South Asian	NA	26	Bachelor's degree	$200,000 or higher	No	NA	Yesterday	I am NOT currently using any prescription contraceptives	NA	A small device, implanted into my uterine wall (IUD)	NA	mirena	not sure
-4	22	Female	Female	White	NA	24	HS diploma/GED	$100,000 - $149,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	I don't take a contraceptive	I don't take a contraceptive
-5	27	Female	Female	East Asian	NA	22	Bachelor's degree	$25,000 - $34,999	No	NA	Two - seven days ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	I don't use any but I know a lot of people take the bill such as Modicon	I am not sure since I don't take any
-6	33	Female	Female	White	NA	28	HS diploma/GED	$25,000 - $34,999	Yes	6	More than a week ago	I AM currently using a prescription contraceptive	NA	A pill, taken orally	NA	Tri-Sprintec	No not really
-7	24	Male	Prefer not to say	White,Latin American	NA	28	Bachelor's degree	$50,000 - $74,999	Yes	25	NA	NA	NA	NA	NA	NA	NA
-8	21	Female	Female	White,Latin American	NA	22	Some college (no degree)	$35,000 - $49,999	Yes	18	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	n/a do not take	n/a I do not take any
-9	27	Male	Male	African American	NA	22	Bachelor's degree	$150,000 - $199,999	Yes	6	NA	NA	NA	NA	NA	NA	NA
-10	27	Male	Male	White	NA	28	Bachelor's degree	$100,000 - $149,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-11	30	Male	Male	African American	NA	29	Bachelor's degree	$75,000 - $99,999	Yes	15	NA	NA	NA	NA	NA	NA	NA
-12	41	Female	Female	White,Latin American	NA	26	Some college (no degree)	$35,000 - $49,999	No	NA	Two - seven days ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	n/a	n/a
-13	45	Female	Female	White	NA	27	Some college (no degree)	$100,000 - $149,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	I don't take any form of birth control	I don't take any form of birth control
-14	17	Female	Female	White,Indigenous American	NA	23	Bachelor's degree	$25,000 - $34,999	No	NA	More than a week ago	I AM currently using a prescription contraceptive	NA	A pill, taken orally	NA	Vienva	NA
-15	33	Female	Female	White	NA	23	Bachelor's degree	$75,000 - $99,999	No	NA	More than a week ago	I AM currently using a prescription contraceptive	NA	A pill, taken orally	NA	lo lo estrin	20 mg?
-16	45	Female	Non-binary	White	NA	26	Some college (no degree)	$25,000 - $34,999	Yes	6 years old	More than a week ago	I AM currently using a prescription contraceptive	NA	A small device, implanted under my skin (e.g., arm, leg, belly)	NA	nexplanon	idk its under my skin
-17	19	Female	Female	White	NA	30	Bachelor's degree	$75,000 - $99,999	No	NA	Yesterday	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	n/a	n/a
-18	33	Male	Male	White	NA	29	HS diploma/GED	$25,000 - $34,999	Yes	10	NA	NA	NA	NA	NA	NA	NA
-19	22	Male	Male	East Asian	NA	30	Bachelor's degree	$75,000 - $99,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-20	11	Male	Male	White	NA	30	Graduate degree	$100,000 - $149,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-21	24	Female	Female	African American,Latin American	NA	28	Bachelor's degree	$100,000 - $149,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	n/a - i do not take hormonal contraceptive	n/a
-22	19	Male	Male	White,Latin American	NA	31	Associate's degree	$100,000 - $149,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-23	32	Male	Male	White	NA	24	Bachelor's degree	$100,000 - $149,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-24	27	Male	Male	African American	NA	28	HS diploma/GED	$15,000 - $24,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-25	30	Female	Other	White,Indigenous American	NA	29	Some college (no degree)	$100,000 - $149,999	Yes	17	Two - seven days ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	I do not take hormonal contraceptives. I had an allergic reaction to one and they've terrified me since.	N/A
-26	23	Male	Male	White	NA	28	Some college (no degree)	$75,000 - $99,999	Yes	15	NA	NA	NA	NA	NA	NA	NA
-27	36	Female	Male	White	NA	27	Bachelor's degree	$50,000 - $74,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	Other	hystorectomy	n/a	n/a
-28	23	Female	Female	African American	NA	26	Bachelor's degree	$35,000 - $49,999	Yes	24	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	I don't take any	i don't take any
-29	20	Male	Male	White	NA	25	Graduate degree	$100,000 - $149,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-30	27	Female	Female	African American	NA	28	Some college (no degree)	$35,000 - $49,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	N/A	N/A
-31	25	Female	Female	White	NA	28	Graduate degree	$75,000 - $99,999	No	NA	Two - seven days ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	I am not currently using any hormonal contraceptive.	Not applicable since I am not using any currently.
-32	28	Female	Female	African American	NA	24	Bachelor's degree	$75,000 - $99,999	No	NA	More than a week ago	I AM currently using a prescription contraceptive	NA	A pill, taken orally	NA	YAZ	Drospirenone - Ethinyl Estradiol 3 MG - 0.02 MG,
-33	24	Male	Male	African American	NA	23	Bachelor's degree	$150,000 - $199,999	Yes	18	NA	NA	NA	NA	NA	NA	NA
-34	21	Male	Male	White	NA	29	Bachelor's degree	$100,000 - $149,999	Yes	24	NA	NA	NA	NA	NA	NA	NA
-35	15	Female	Female	White	NA	26	Bachelor's degree	$50,000 - $74,999	Yes	23	Two - seven days ago	I AM currently using a prescription contraceptive	NA	A ring, inserted vaginally	NA	Nuvaring	not sure, I don't have any of the boxes left
-36	23	Female	Female	African American	NA	27	Associate's degree	$75,000 - $99,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	I am not using one.	I do not use one.
-37	19	Male	Male	White	NA	25	Bachelor's degree	$75,000 - $99,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-38	24	Male	Male	African American	NA	19	Some college (no degree)	$75,000 - $99,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-39	31	Female	Female	White,South Asian	NA	27	Associate's degree	$35,000 - $49,999	Yes	7	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	plan b	yes its levonorgestrel 1.5 mg
-40	30	Female	Female	White	NA	27	HS diploma/GED	Prefer not to say	Yes	27	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	I don't take any hormonal contraceptive	I don't take any hormonal contraceptive
-41	38	Female	Female	White	NA	27	Bachelor's degree	$35,000 - $49,999	Yes	26	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	N/A	N/A
-42	26	Male	Male	White	NA	30	Bachelor's degree	$75,000 - $99,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-43	20	Male	Male	White	NA	30	HS diploma/GED	Under $15,000	Yes	7	NA	NA	NA	NA	NA	NA	NA
-44	21	Male	Male	White	NA	28	Graduate degree	$75,000 - $99,999	Yes	17	NA	NA	NA	NA	NA	NA	NA
-45	31	Male	Male	White	NA	28	Bachelor's degree	$50,000 - $74,999	Yes	16	NA	NA	NA	NA	NA	NA	NA
-46	24	Female	Female	White	NA	28	Bachelor's degree	$100,000 - $149,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	I am not on any hormonal contraceptive, and I have not been using any contraceptive, just withdrawal	NA
-47	14	Male	Male	Latin American	NA	28	Bachelor's degree	$75,000 - $99,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-48	31	Male	Male	African American	NA	28	Bachelor's degree	$75,000 - $99,999	Yes	4 or 5	NA	NA	NA	NA	NA	NA	NA
-49	33	Female	Female	White	NA	21	HS diploma/GED	$75,000 - $99,999	Yes	17	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	Do not take one	Do not take one
-50	26	Female	Female	White	NA	23	Bachelor's degree	$25,000 - $34,999	Yes	16	Two - seven days ago	I am NOT currently using any prescription contraceptives	NA	A small device, implanted into my uterine wall (IUD)	NA	Paraguard	n/a
-51	17	Male	Male	White	NA	25	Bachelor's degree	$50,000 - $74,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-52	15	Male	Male	White	NA	27	Associate's degree	$50,000 - $74,999	Yes	12	NA	NA	NA	NA	NA	NA	NA
-53	18	Male	Male	East Asian	NA	19	Some college (no degree)	Prefer not to say	No	NA	NA	NA	NA	NA	NA	NA	NA
-54	30	Female	Female	White	NA	25	Bachelor's degree	NA	No	NA	More than a week ago	I AM currently using a prescription contraceptive	NA	A pill, taken orally	NA	Lo Loestrin	10 mcg
-55	21	Female	Female	African American	NA	26	Some college (no degree)	$50,000 - $74,999	Yes	19	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	NA	NA
-56	27	Male	Male	White	NA	29	Associate's degree	$100,000 - $149,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-57	36	Female	Female	White	NA	28	Some college (no degree)	$25,000 - $34,999	Yes	11	Today	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	N/A	N/a
-58	14	Female	Female	White	NA	30	Some college (no degree)	$50,000 - $74,999	No	NA	Yesterday	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	NA	NA
-59	19	Female	Female	White	NA	25	HS diploma/GED	$25,000 - $34,999	No	NA	More than a week ago	I AM currently using a prescription contraceptive	NA	A pill, taken orally	NA	Volnea	Yes, .01mg progestin
-60	37	Male	Male	White	NA	28	HS diploma/GED	$25,000 - $34,999	Yes	7	NA	NA	NA	NA	NA	NA	NA
-61	16	Male	Male	Latin American	NA	28	Bachelor's degree	$35,000 - $49,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-62	36	Female	Female	White	NA	30	Bachelor's degree	$100,000 - $149,999	Yes	30	More than a week ago	I AM currently using a prescription contraceptive	NA	A small device, implanted into my uterine wall (IUD)	NA	liletta	unsure
-63	28	Male	Male	South Asian	NA	27	HS diploma/GED	$50,000 - $74,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-64	32	Female	Female	African American	NA	26	HS diploma/GED	$15,000 - $24,999	Yes	12	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	N/A	N/A
-65	33	Female	Female	African American	NA	30	Some college (no degree)	$50,000 - $74,999	Yes	24	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	NA	NA
-66	33	Female	Non-binary	White	NA	28	HS diploma/GED	Under $15,000	Yes	25 years old, nearly 26	Two - seven days ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	N/A	N/A
-67	32	Male	Male	White	NA	22	Some college (no degree)	$25,000 - $34,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-68	23	Female	Non-binary	White	NA	24	Some college (no degree)	$75,000 - $99,999	Yes	19	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	N/A; not taking one, as I said previously	N/A; not taking one, as I said previously
-69	37	Male	Male	East Asian	NA	30	Bachelor's degree	$100,000 - $149,999	Yes	13	NA	NA	NA	NA	NA	NA	NA
-70	19	Female	Female	African American	NA	30	Associate's degree	$75,000 - $99,999	Yes	15	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	N/A	N/A
-71	22	Female	Female	White	NA	21	Bachelor's degree	$35,000 - $49,999	No	NA	Two - seven days ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	I don't posses or use any currently	No.
-72	31	Male	Male	African American,South Asian	NA	26	Associate's degree	$35,000 - $49,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-73	17	Male	Male	White	NA	23	Some college (no degree)	$75,000 - $99,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-74	15	Male	Male	White	NA	21	HS diploma/GED	$50,000 - $74,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-75	21	Male	Male	White	NA	26	Bachelor's degree	$50,000 - $74,999	Yes	25	NA	NA	NA	NA	NA	NA	NA
-76	43	Female	Female	White	NA	29	HS diploma/GED	$35,000 - $49,999	Yes	23	Two - seven days ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	none	none
-77	20	Male	Male	White	NA	22	Bachelor's degree	$75,000 - $99,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-78	26	Male	Male	Latin American	NA	26	Bachelor's degree	$100,000 - $149,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-79	18	Female	Female	Latin American	NA	25	Bachelor's degree	$35,000 - $49,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	n/a	n/a
-80	32	Male	Male	White	NA	23	Graduate degree	$50,000 - $74,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-81	25	Male	Male	Other	South East Asian	30	Bachelor's degree	$50,000 - $74,999	Yes	29	NA	NA	NA	NA	NA	NA	NA
-82	21	Female	Female	African American	NA	29	Bachelor's degree	$75,000 - $99,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	N/A	N/A
-83	45	Male	Male	White	NA	29	Associate's degree	$35,000 - $49,999	Yes	22	NA	NA	NA	NA	NA	NA	NA
-84	27	Female	Female	South Asian	NA	28	Bachelor's degree	Under $15,000	No	NA	Two - seven days ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	Not taking any hormonal contraceptive	Not taking any hormonal contraceptive
-85	34	Male	Male	African American	NA	22	Bachelor's degree	$75,000 - $99,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-86	28	Female	Female	White	NA	30	Graduate degree	$200,000 or higher	No	NA	Two - seven days ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	I don't use a hormonal contraceptive.	I don't use a hormonal contraceptive.
-87	32	Male	Male	South Asian	NA	30	Graduate degree	$150,000 - $199,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-88	25	Male	Male	African American	NA	24	Less than a HS diploma	$100,000 - $149,999	Yes	17	NA	NA	NA	NA	NA	NA	NA
-89	25	Female	Female	White	NA	30	Graduate degree	$100,000 - $149,999	No	NA	Two - seven days ago	I AM currently using a prescription contraceptive	NA	A small device, implanted into my uterine wall (IUD)	NA	Mirena IUD	Not sure
-90	19	Female	Female	White	NA	26	Graduate degree	$150,000 - $199,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	NA	NA
-91	28	Female	Female	White	NA	30	Bachelor's degree	$50,000 - $74,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	N/A	N/A
-92	33	Male	Male	White	NA	20	Some college (no degree)	Prefer not to say	No	NA	NA	NA	NA	NA	NA	NA	NA
-93	13	Female	Female	White	NA	27	Some college (no degree)	$50,000 - $74,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	N/A	N/A
-94	43	Female	Female	White	NA	24	Bachelor's degree	$35,000 - $49,999	Yes	18	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	N/A	N/A
-95	16	Male	Male	White	NA	28	Bachelor's degree	$35,000 - $49,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-96	14	Male	Male	White	NA	27	Graduate degree	$25,000 - $34,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-97	25	Female	Female	East Asian	NA	29	Graduate degree	$100,000 - $149,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	n/a	n/a
-98	33	Male	Male	White	NA	28	Graduate degree	$75,000 - $99,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-99	33	Male	Male	White	NA	27	Bachelor's degree	$100,000 - $149,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-100	38	Female	Female	White	NA	30	Bachelor's degree	$50,000 - $74,999	Yes	28	More than a week ago	I AM currently using a prescription contraceptive	NA	A small device, implanted into my uterine wall (IUD)	NA	Paragard	I don't have the packaging
-101	33	Male	Male	White	NA	28	Some college (no degree)	$50,000 - $74,999	Yes	7	NA	NA	NA	NA	NA	NA	NA
-102	37	Female	Female	African American	NA	21	Bachelor's degree	$25,000 - $34,999	No	NA	Two - seven days ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	none	none
-103	9	Female	Female	White	NA	26	Bachelor's degree	$35,000 - $49,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	NA	NA
-104	22	Female	Female	White	NA	25	Some college (no degree)	$75,000 - $99,999	No	NA	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	N/A	N/A
-105	22	Female	Female	Indigenous American	NA	22	Bachelor's degree	$35,000 - $49,999	Yes	6	Two - seven days ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	n/a- not taking any	n/a- not taking any
-106	21	Female	Female	African American,White,Indigenous American,East Asian	NA	25	Bachelor's degree	$100,000 - $149,999	No	NA	Two - seven days ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	n/a	n/a
-107	22	Male	Male	White	NA	25	Bachelor's degree	$25,000 - $34,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-108	34	Female	Female	African American	NA	20	HS diploma/GED	$75,000 - $99,999	Yes	16	Two - seven days ago	I AM currently using a prescription contraceptive	NA	A pill, taken orally	NA	Apri	Apri contains two hormones: desogestrel (a progestin) and ethinyl estradiol (an estrogen).
- Dosage: Each active tablet in an Apri pack contains 0.15 mg of desogestrel and 0.03 mg of ethinyl estradiol.
-109	23	Male	Male	African American	NA	28	Graduate degree	$100,000 - $149,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-110	38	Male	Male	White	NA	30	Graduate degree	$75,000 - $99,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-111	14	Female	Female	East Asian	NA	27	Graduate degree	$75,000 - $99,999	Yes	23	More than a week ago	I AM currently using a prescription contraceptive	NA	A small device, implanted into my uterine wall (IUD)	NA	mirena	52 mg levonorgestrel
-112	41	Male	Non-binary	White	NA	26	Bachelor's degree	$50,000 - $74,999	Yes	I was diagnosed with it around the age of 13	NA	NA	NA	NA	NA	NA	NA
-113	19	Male	Male	White	NA	28	HS diploma/GED	$50,000 - $74,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-114	25	Female	Female	African American	NA	19	Graduate degree	$35,000 - $49,999	Yes	16	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	NA	NA
-115	28	Female	Female	White	NA	27	Associate's degree	$35,000 - $49,999	Yes	19	More than a week ago	I AM currently using a prescription contraceptive	NA	A pill, taken orally	NA	Altavera	Levonorgestrel and Ethinyl Estradiol tablets. 0.15mg and 0.03mg.
-116	13	Male	Male	Latin American	NA	23	Some college (no degree)	$25,000 - $34,999	Yes	3	NA	NA	NA	NA	NA	NA	NA
-117	41	Female	Female	White	NA	29	Some college (no degree)	Under $15,000	Yes	16	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	I do not take hormonal contraceptives.	N/a
-118	23	Male	Male	White	NA	24	Associate's degree	$75,000 - $99,999	Yes	12	NA	NA	NA	NA	NA	NA	NA
-119	29	Male	Male	White	NA	30	Graduate degree	$100,000 - $149,999	Yes	7	NA	NA	NA	NA	NA	NA	NA
-120	24	Male	Non-binary	African American	NA	26	HS diploma/GED	$50,000 - $74,999	Yes	21	NA	NA	NA	NA	NA	NA	NA
-121	29	Male	Other	Latin American	NA	23	HS diploma/GED	Under $15,000	Yes	I don't remember, maybe 19	NA	NA	NA	NA	NA	NA	NA
-122	37	Male	Male	White	NA	19	Some college (no degree)	$75,000 - $99,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-123	16	Male	Male	African American	NA	28	Bachelor's degree	$75,000 - $99,999	Yes	13	NA	NA	NA	NA	NA	NA	NA
-124	15	Male	Male	White	NA	26	Graduate degree	$75,000 - $99,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-125	23	Female	Female	East Asian,South Asian	NA	22	Bachelor's degree	$75,000 - $99,999	No	NA	More than a week ago	I AM currently using a prescription contraceptive	NA	A pill, taken orally	NA	Vienva	Levonorgestrel 0.1 mg, Ethinyl Estradiol 0.02 mg
-126	35	Male	Male	White	NA	26	Some college (no degree)	$100,000 - $149,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-127	15	Male	Male	Latin American	NA	27	HS diploma/GED	$100,000 - $149,999	No	NA	NA	NA	NA	NA	NA	NA	NA
-128	27	Male	Male	White	NA	23	Some college (no degree)	$35,000 - $49,999	Yes	23	NA	NA	NA	NA	NA	NA	NA
-129	38	Male	Male	White	NA	24	Some college (no degree)	$15,000 - $24,999	Yes	10	NA	NA	NA	NA	NA	NA	NA
-130	29	Female	Female	White	NA	23	HS diploma/GED	$25,000 - $34,999	Yes	13	More than a week ago	I am NOT currently using any prescription contraceptives	NA	I am NOT taking any prescription contraceptive	NA	I don't take one	N/A
-131	18	Male	Male	Latin American	NA	27	Bachelor's degree	$35,000 - $49,999	Yes	21	NA	NA	NA	NA	NA	NA	NA
+SN	AMAS_Comp	Bio_Sex	Gender	Race	Age	EdLev	AMAS_1	AMAS_2	AMAS_3	AMAS_4	AMAS_5	AMAS_6	AMAS_7	AMAS_8	AMAS_9
+1	24	Male	Male	White	27	HS diploma/GED	3	2	2	4	3	1	2	5	2
+2	13	Male	Male	White	20	HS diploma/GED	1	2	1	2	2	1	1	2	1
+3	30	Female	Female	Pacific Islander,East Asian,South Asian	26	Bachelor's degree	2	4	2	5	4	2	3	4	4
+4	22	Female	Female	White	24	HS diploma/GED	3	2	3	3	3	2	2	2	2
+5	27	Female	Female	East Asian	22	Bachelor's degree	2	4	1	3	5	3	2	5	2
+6	33	Female	Female	White	28	HS diploma/GED	3	4	2	5	3	4	4	3	5
+7	24	Male	Prefer not to say	White,Latin American	28	Bachelor's degree	2	1	3	3	4	2	2	4	3
+8	21	Female	Female	White,Latin American	22	Some college (no degree)	1	4	3	1	1	4	3	3	1
+9	27	Male	Male	African American	22	Bachelor's degree	3	4	3	2	2	3	3	4	3
+10	27	Male	Male	White	28	Bachelor's degree	2	3	4	4	3	3	3	3	2
+11	30	Male	Male	African American	29	Bachelor's degree	2	4	3	5	3	2	3	5	3
+12	41	Female	Female	White,Latin American	26	Some college (no degree)	4	5	5	5	4	4	4	5	5
+13	45	Female	Female	White	27	Some college (no degree)	5	5	5	5	5	5	5	5	5
+14	17	Female	Female	White,Indigenous American	23	Bachelor's degree	1	3	1	3	2	1	1	4	1
+15	33	Female	Female	White	23	Bachelor's degree	2	5	3	5	4	3	3	5	3
+16	45	Female	Non-binary	White	26	Some college (no degree)	5	5	5	5	5	5	5	5	5
+17	19	Female	Female	White	30	Bachelor's degree	2	3	2	3	1	1	1	4	2
+18	33	Male	Male	White	29	HS diploma/GED	3	5	3	4	4	2	4	5	3
+19	22	Male	Male	East Asian	30	Bachelor's degree	1	4	1	5	3	1	1	5	1
+20	11	Male	Male	White	30	Graduate degree	1	3	1	1	1	1	1	1	1
+21	24	Female	Female	African American,Latin American	28	Bachelor's degree	1	3	1	4	5	1	2	5	2
+22	19	Male	Male	White,Latin American	31	Associate's degree	2	4	1	3	2	2	1	3	1
+23	32	Male	Male	White	24	Bachelor's degree	2	5	3	5	5	3	2	4	3
+24	27	Male	Male	African American	28	HS diploma/GED	1	5	3	5	2	1	3	4	3
+25	30	Female	Other	White,Indigenous American	29	Some college (no degree)	3	5	2	5	5	2	1	5	2
+26	23	Male	Male	White	28	Some college (no degree)	1	3	3	3	3	2	2	4	2
+27	36	Female	Male	White	27	Bachelor's degree	3	4	4	4	4	4	4	5	4
+28	23	Female	Female	African American	26	Bachelor's degree	1	4	2	4	4	2	1	4	1
+29	20	Male	Male	White	25	Graduate degree	2	3	2	3	2	1	1	4	2
+30	27	Female	Female	African American	28	Some college (no degree)	3	3	3	3	3	3	3	3	3
+31	25	Female	Female	White	28	Graduate degree	3	4	1	3	4	3	2	3	2
+32	28	Female	Female	African American	24	Bachelor's degree	2	4	3	5	3	2	3	4	2
+33	24	Male	Male	African American	23	Bachelor's degree	2	4	1	5	3	1	2	5	1
+34	21	Male	Male	White	29	Bachelor's degree	1	4	1	2	3	2	4	3	1
+35	15	Female	Female	White	26	Bachelor's degree	2	2	1	2	2	1	1	3	1
+36	23	Female	Female	African American	27	Associate's degree	2	2	3	3	3	2	2	3	3
+37	19	Male	Male	White	25	Bachelor's degree	1	3	2	3	3	1	1	3	2
+38	24	Male	Male	African American	19	Some college (no degree)	1	5	2	5	3	1	2	4	1
+39	31	Female	Female	White,South Asian	27	Associate's degree	3	5	4	5	4	2	2	4	2
+40	30	Female	Female	White	27	HS diploma/GED	2	4	3	5	3	3	3	4	3
+41	38	Female	Female	White	27	Bachelor's degree	3	5	4	5	5	4	4	5	3
+42	26	Male	Male	White	30	Bachelor's degree	3	4	3	4	3	2	2	3	2
+43	20	Male	Male	White	30	HS diploma/GED	1	4	1	3	4	1	1	4	1
+44	21	Male	Male	White	28	Graduate degree	2	3	2	3	3	1	2	3	2
+45	31	Male	Male	White	28	Bachelor's degree	4	3	2	5	4	3	3	5	2
+46	24	Female	Female	White	28	Bachelor's degree	2	4	2	4	3	1	1	4	3
+47	14	Male	Male	Latin American	28	Bachelor's degree	1	2	1	2	2	1	1	3	1
+48	31	Male	Male	African American	28	Bachelor's degree	2	4	5	3	4	3	2	4	4
+49	33	Female	Female	White	21	HS diploma/GED	3	4	2	4	4	3	4	5	4
+50	26	Female	Female	White	23	Bachelor's degree	2	4	1	5	3	2	2	5	2
+51	17	Male	Male	White	25	Bachelor's degree	1	4	2	2	2	1	1	3	1
+52	15	Male	Male	White	27	Associate's degree	1	2	1	3	1	1	1	4	1
+53	18	Male	Male	East Asian	19	Some college (no degree)	1	3	2	3	2	1	1	3	2
+54	30	Female	Female	White	25	Bachelor's degree	3	4	2	4	5	2	2	5	3
+55	21	Female	Female	African American	26	Some college (no degree)	1	3	1	3	2	3	4	3	1
+56	27	Male	Male	White	29	Associate's degree	2	4	2	4	4	2	2	4	3
+57	36	Female	Female	White	28	Some college (no degree)	4	5	3	5	5	3	3	5	3
+58	14	Female	Female	White	30	Some college (no degree)	1	2	1	2	2	1	1	3	1
+59	19	Female	Female	White	25	HS diploma/GED	2	2	2	2	2	2	2	3	2
+60	37	Male	Male	White	28	HS diploma/GED	4	5	5	4	5	3	4	4	3
+61	16	Male	Male	Latin American	28	Bachelor's degree	2	2	1	3	2	1	1	3	1
+62	36	Female	Female	White	30	Bachelor's degree	4	4	4	5	3	3	4	5	4
+63	28	Male	Male	South Asian	27	HS diploma/GED	3	2	5	2	3	3	3	2	5
+64	32	Female	Female	African American	26	HS diploma/GED	1	5	2	4	5	3	3	5	4
+65	33	Female	Female	African American	30	Some college (no degree)	5	5	3	4	3	3	2	5	3
+66	33	Female	Non-binary	White	28	HS diploma/GED	2	4	3	5	5	4	3	3	4
+67	32	Male	Male	White	22	Some college (no degree)	2	5	3	5	4	3	3	5	2
+68	23	Female	Non-binary	White	24	Some college (no degree)	1	2	3	2	1	4	4	5	1
+69	37	Male	Male	East Asian	30	Bachelor's degree	3	5	4	5	5	3	4	5	3
+70	19	Female	Female	African American	30	Associate's degree	3	4	1	4	1	1	1	3	1
+71	22	Female	Female	White	21	Bachelor's degree	2	3	1	3	4	2	1	4	2
+72	31	Male	Male	African American,South Asian	26	Associate's degree	2	4	3	4	5	2	3	4	4
+73	17	Male	Male	White	23	Some college (no degree)	1	2	2	2	3	2	2	2	1
+74	15	Male	Male	White	21	HS diploma/GED	1	2	1	3	2	1	1	2	2
+75	21	Male	Male	White	26	Bachelor's degree	1	3	1	4	4	1	1	5	1
+76	43	Female	Female	White	29	HS diploma/GED	5	5	3	5	5	5	5	5	5
+77	20	Male	Male	White	22	Bachelor's degree	1	4	1	3	5	2	1	1	2
+78	26	Male	Male	Latin American	26	Bachelor's degree	3	4	2	3	2	3	2	4	3
+79	18	Female	Female	Latin American	25	Bachelor's degree	1	2	1	3	3	2	1	3	2
+80	32	Male	Male	White	23	Graduate degree	3	4	2	5	5	3	2	5	3
+81	25	Male	Male	Other	30	Bachelor's degree	1	3	2	4	4	2	2	4	3
+82	21	Female	Female	African American	29	Bachelor's degree	1	4	2	4	3	1	1	4	1
+83	45	Male	Male	White	29	Associate's degree	5	5	5	5	5	5	5	5	5
+84	27	Female	Female	South Asian	28	Bachelor's degree	2	3	3	4	4	3	2	3	3
+85	34	Male	Male	African American	22	Bachelor's degree	4	3	3	5	4	3	4	5	3
+86	28	Female	Female	White	30	Graduate degree	1	4	2	4	4	3	2	5	3
+87	32	Male	Male	South Asian	30	Graduate degree	4	3	3	2	4	4	3	5	4
+88	25	Male	Male	African American	24	Less than a HS diploma	2	4	2	4	3	2	2	3	3
+89	25	Female	Female	White	30	Graduate degree	3	3	2	3	4	2	2	3	3
+90	19	Female	Female	White	26	Graduate degree	2	3	2	3	3	1	1	3	1
+91	28	Female	Female	White	30	Bachelor's degree	3	5	2	4	4	1	1	5	3
+92	33	Male	Male	White	20	Some college (no degree)	1	5	3	5	4	4	5	5	1
+93	13	Female	Female	White	27	Some college (no degree)	1	2	1	2	1	1	1	3	1
+94	43	Female	Female	White	24	Bachelor's degree	5	5	5	5	5	4	5	5	4
+95	16	Male	Male	White	28	Bachelor's degree	1	2	1	2	4	1	1	3	1
+96	14	Male	Male	White	27	Graduate degree	1	2	1	3	2	1	1	2	1
+97	25	Female	Female	East Asian	29	Graduate degree	2	3	3	3	3	3	1	4	3
+98	33	Male	Male	White	28	Graduate degree	2	5	4	5	3	4	3	3	4
+99	33	Male	Male	White	27	Bachelor's degree	4	5	2	5	5	1	2	5	4
+100	38	Female	Female	White	30	Bachelor's degree	4	5	3	5	5	4	4	5	3
+101	33	Male	Male	White	28	Some college (no degree)	3	3	4	4	5	3	3	4	4
+102	37	Female	Female	African American	21	Bachelor's degree	3	5	4	4	5	4	3	4	5
+103	9	Female	Female	White	26	Bachelor's degree	1	1	1	1	1	1	1	1	1
+104	22	Female	Female	White	25	Some college (no degree)	1	3	2	4	3	2	2	3	2
+105	22	Female	Female	Indigenous American	22	Bachelor's degree	3	3	2	3	3	1	1	4	2
+106	21	Female	Female	African American,White,Indigenous American,East Asian	25	Bachelor's degree	2	4	2	4	3	1	1	3	1
+107	22	Male	Male	White	25	Bachelor's degree	2	3	2	3	2	2	2	3	3
+108	34	Female	Female	African American	20	HS diploma/GED	3	4	2	4	4	4	4	5	4
+109	23	Male	Male	African American	28	Graduate degree	1	3	1	4	3	2	2	5	2
+110	38	Male	Male	White	30	Graduate degree	4	5	4	4	5	3	3	5	5
+111	14	Female	Female	East Asian	27	Graduate degree	1	2	1	2	2	1	1	2	2
+112	41	Male	Non-binary	White	26	Bachelor's degree	1	5	5	5	5	5	5	5	5
+113	19	Male	Male	White	28	HS diploma/GED	2	3	1	4	3	1	1	3	1
+114	25	Female	Female	African American	19	Graduate degree	2	3	2	3	3	2	3	3	4
+115	28	Female	Female	White	27	Associate's degree	2	4	2	4	4	3	2	5	2
+116	13	Male	Male	Latin American	23	Some college (no degree)	1	2	1	2	2	1	1	2	1
+117	41	Female	Female	White	29	Some college (no degree)	4	5	5	5	5	4	4	5	4
+118	23	Male	Male	White	24	Associate's degree	2	3	2	4	3	2	1	3	3
+119	29	Male	Male	White	30	Graduate degree	3	4	2	4	4	2	2	5	3
+120	24	Male	Non-binary	African American	26	HS diploma/GED	2	3	2	3	3	2	3	4	2
+121	29	Male	Other	Latin American	23	HS diploma/GED	2	4	3	5	3	3	2	3	4
+122	37	Male	Male	White	19	Some college (no degree)	3	5	4	3	5	3	5	5	4
+123	16	Male	Male	African American	28	Bachelor's degree	1	2	1	2	3	1	1	3	2
+124	15	Male	Male	White	26	Graduate degree	1	2	1	3	2	1	1	3	1
+125	23	Female	Female	East Asian,South Asian	22	Bachelor's degree	2	4	1	5	3	1	1	4	2
+126	35	Male	Male	White	26	Some college (no degree)	2	4	4	5	5	3	3	5	4
+127	15	Male	Male	Latin American	27	HS diploma/GED	1	2	1	2	3	1	1	3	1
+128	27	Male	Male	White	23	Some college (no degree)	2	4	3	4	3	3	2	4	2
+129	38	Male	Male	White	24	Some college (no degree)	4	5	3	5	5	3	4	5	4
+130	29	Female	Female	White	23	HS diploma/GED	2	3	3	4	3	3	3	4	4
+131	18	Male	Male	Latin American	27	Bachelor's degree	2	1	2	4	3	1	1	3	1

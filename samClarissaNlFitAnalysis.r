@@ -1,13 +1,13 @@
 library(nlFit)
 library(chutils)
 library(tidyr)
-source("../nlFitRun.r")
+source(nlFitRunScript)
 
 nlFitLoops <- 250
 targetOrder <- "random"
-#Only run new models that have not been run before?
+#skip the fits if their folder already exists
 skipModelsWithExistingDirs <- TRUE
-freepIncludeConceptualPoints <- FALSE
+freepConceptual <- FALSE
 conceptualReferencePoints <- 0
 
 
@@ -16,10 +16,9 @@ df.long <- read.table(filenamexl, header = T, sep="\t")
 
 mainDirPath <- getwd()
 
-##### Run analysis on each subject and as a group
+##### fit each subject and the group
 subjects <- unique(df.long$SN)
 types <- unique(df.long$nlType)
-types <- c(types, "unboundedBetweenLabels")
 subjects <- c(subjects, "all")
 
 yLim <- c(min(df.long$s_minBound), max(df.long$s_maxBound))
@@ -31,7 +30,7 @@ keepCols <- c("nlType", "s_targ", "s_est", "s_ub", "s_lb", "s_maxBound", "s_minB
 	data.tmp <- NULL
 	
 	df.long.1 <- df.long
-	subDirExists <- ch.newDir (mainDirPath, "nlFit")
+	subDirExists <- ch.newDir (mainDirPath, nlFitDirName)
 	ffMilPath <- getwd()
 	outFilename <- "nlGenFitData.txt"
 	dataOutFilename <- "nlGenPlotData.txt"
@@ -52,19 +51,15 @@ keepCols <- c("nlType", "s_targ", "s_est", "s_ub", "s_lb", "s_maxBound", "s_minB
 			}
 	
 			for(typ in types) {
-				if(typ == "unboundedBetweenLabels") {
-					df.tmp <- df.tmp.1[df.tmp.1$isUniversalBounded == TRUE, ]
-				} else {
-					df.tmp <- df.tmp.1[df.tmp.1$nlType == typ, ]		
-				}
+				df.tmp <- df.tmp.1[df.tmp.1$nlType == typ, ]		
 		 
 				plotFileName.1 <- paste(sub, typ, "nlFitplot.pdf", sep="-")
 				plotFileName.2 <- file.path(nlFitPlotPath, plotFileName.1)
 				sinkFileName.1 <- paste(sub, typ, "nlFitout.txt", sep="-")
 				sinkFileName.2 <- file.path(nlFitPath, sinkFileName.1)
-				outlist.r <- nlFitRun(df.tmp$s_targ, df.tmp$s_est, upperBound = df.tmp$s_maxBound[1], lowerBound = df.tmp$s_minBound[1], visibleReferencePoints = c(df.tmp$s_lb[1], df.tmp$s_ub[1]), conceptualReferencePoints = conceptualReferencePoints, freepIncludeConceptualPoints = freepIncludeConceptualPoints, targetOrder = targetOrder, plotFileName = plotFileName.2, sinkFileName = sinkFileName.2, loops = nlFitLoops, yLim = yLim, xLim = xLim)
+				outlist.r <- nlFitRun(df.tmp$s_targ, df.tmp$s_est, upperBound = df.tmp$s_maxBound[1], lowerBound = df.tmp$s_minBound[1], visibleReferencePoints = c(df.tmp$s_lb[1], df.tmp$s_ub[1]), conceptualReferencePoints = conceptualReferencePoints, freepConceptual = freepConceptual, targetOrder = targetOrder, plotFileName = plotFileName.2, sinkFileName = sinkFileName.2, loops = nlFitLoops, yLim = yLim, xLim = xLim)
 
-				df.tmp.fit <- data.frame(sn = sub, nlType = typ, nl_firstEstimate_Random =  outlist.r$fit$firstEstimate, nl_accuracyPercent_Random =  outlist.r$fit$accuracyPercent, nl_numberSensitivity_Random =  outlist.r$fit$numberSensitivity, nl_pIncludeConceptualPoints_Random =  outlist.r$fit$pIncludeConceptualPoints, nl_rangeLength_Random =  outlist.r$fit$rangeLength, nl_memoryLength_Random =  outlist.r$fit$memoryLength, nl_r2_Random =  outlist.r$fit$r2,  nl_BIC_Random =  outlist.r$fit$BIC)
+				df.tmp.fit <- data.frame(sn = sub, nlType = typ, nl_firstEstimate_Random =  outlist.r$fit$firstEstimate, nl_accuracyPercent_Random =  outlist.r$fit$accuracyPercent, nl_numberSensitivity_Random =  outlist.r$fit$numberSensitivity, nl_pConceptual_Random =  outlist.r$fit$pConceptual, nl_memoryLength_Random =  outlist.r$fit$memoryLength, nl_r2_Random =  outlist.r$fit$r2,  nl_BIC_Random =  outlist.r$fit$BIC)
 
 				all.tmp <- ch.rbind(all.tmp, df.tmp.fit)
 				

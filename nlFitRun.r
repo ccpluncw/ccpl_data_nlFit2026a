@@ -1,9 +1,9 @@
 library(chutils)
 library(dplyr)
-library(smartGridSearch)
+library(smartGridSearch2)
 library(nlFit)
 
-nlFitRun <- function(targets, estimates, upperBound, lowerBound, visibleReferencePoints, conceptualReferencePoints = NULL, freeMemoryLength = FALSE, freeRangeLength = FALSE, freeNumberSensitivity = TRUE, freepIncludeConceptualPoints = FALSE, loops = 500, targetOrder = "random", plotFileName = "nlFitplot.pdf", sinkFileName = "nlFitout.txt", verbose = FALSE, yLim = NULL, xLim = NULL) {
+nlFitRun <- function(targets, estimates, upperBound, lowerBound, visibleReferencePoints, conceptualReferencePoints = NULL, freeMemoryLength = FALSE, freeNumberSensitivity = TRUE, freepConceptual = FALSE, loops = 500, targetOrder = "random", plotFileName = "nlFitplot.pdf", sinkFileName = "nlFitout.txt", verbose = FALSE, yLim = NULL, xLim = NULL) {
 	
 	data.in <- data.frame(targets, estimates)
 	
@@ -14,18 +14,14 @@ nlFitRun <- function(targets, estimates, upperBound, lowerBound, visibleReferenc
 	multicorePackages <- "nlFit"
 
 
-	#number of intervals to split each bounded parameter into in order to get the random values between the hi and low values
+	#intervals each bounded parameter is split into for the random draws
 	numGridIntervals <- 200
-	#the number of times to loop with grid search before looking for the top 10 best fits.
-	numGridLoops <- ifelse(test, 50, 250) #250
-	#paramtable confirmation loops
+	#grid search loops before the best fits are kept
+	numGridLoops <- ifelse(test, 50, 250)
+	#confirmation loops on the parameter bounds
 	optBoundLoops <- 20
-	#The number of best fit runs from which to resize the parameter bounds.
-	#Here, I set it to the sqrt(total number of runs per grid loop) or 10 at minimum.
-	  #optParamListN <- ifelse ( trunc(sqrt(numGridLoops)) < 10, 10, trunc(sqrt(numGridLoops)) )
+	#best fit runs used to resize the parameter bounds
 	optParamListN <- 20
-	#the number of simulations to average using the final parameters.
-	numSimsToAverage <- 20
 
 	numLoops <- numGridLoops
 	numIntervals <- numGridIntervals
@@ -34,8 +30,7 @@ nlFitRun <- function(targets, estimates, upperBound, lowerBound, visibleReferenc
 
 	dataTargetCol <- "targets"
 	dataEstimateCol <- "estimates"
-	defaultRangeLength <- 1
-	defaultNumberSensitivity <- 0
+	defaultNumberSensitivity <- 1
 
 		df.out <- NULL
 		df.dat <- NULL
@@ -43,7 +38,7 @@ nlFitRun <- function(targets, estimates, upperBound, lowerBound, visibleReferenc
 		numTargets <- length(unique(data.in$target))
 		df.tmp <- data.in %>% group_by(targets) %>% summarize(estimates = mean(estimates, na.rm = T))
 				
-		### nlFit
+		#free parameters and their ranges
 		pUpper <- list(firstEstimate = 1, accuracyPercent = 1)
 		pLower <- list(firstEstimate = 0, accuracyPercent = 0)
 		pInt <- list(firstEstimate = 0.001, accuracyPercent = 0.001)
@@ -57,13 +52,6 @@ nlFitRun <- function(targets, estimates, upperBound, lowerBound, visibleReferenc
 		} else {
 			otherParameterList[["numberSensitivity"]] <- defaultNumberSensitivity
 		}
-		if(freeRangeLength) {
-			pUpper[["rangeLength"]] <- numTargets
-			pLower[["rangeLength"]] <- 1
-			pInt[["rangeLength"]] <- 1
-		} else {
-			otherParameterList[["rangeLength"]] <- defaultRangeLength
-		}
 		if(freeMemoryLength) {
 			pUpper[["memoryLength"]] <- numTargets
 			pLower[["memoryLength"]] <- 1
@@ -71,12 +59,12 @@ nlFitRun <- function(targets, estimates, upperBound, lowerBound, visibleReferenc
 		} else {
 			otherParameterList[["memoryLength"]] <- numTargets
 		}
-		if(freepIncludeConceptualPoints) {
-			pUpper[["pIncludeConceptualPoints"]] <- 1
-			pLower[["pIncludeConceptualPoints"]] <- 0
-			pInt[["pIncludeConceptualPoints"]] <- 0.001
+		if(freepConceptual) {
+			pUpper[["pConceptual"]] <- 1
+			pLower[["pConceptual"]] <- 0
+			pInt[["pConceptual"]] <- 0.001
 		} else {
-			otherParameterList[["pIncludeConceptualPoints"]] <- 0
+			otherParameterList[["pConceptual"]] <- 0
 		}
 		pars.n <- length(pUpper)
 		otherParameterList[["pars.n"]] <- pars.n
@@ -87,8 +75,7 @@ nlFitRun <- function(targets, estimates, upperBound, lowerBound, visibleReferenc
 		statList$upperBound <- upperBound
 		statList$lowerBound <- lowerBound
 		if(!freeMemoryLength) statList$memoryLength <- numTargets
-		if(!freeRangeLength) statList$rangeLength <- defaultRangeLength
-		if(!freepIncludeConceptualPoints) statList$pIncludeConceptualPoints <- 0
+		if(!freepConceptual) statList$pConceptual <- 0
 		if(!freeNumberSensitivity) statList$numberSensitivity <- defaultNumberSensitivity
 		statList$targetOrder <- targetOrder
 		statList$visibleReferencePoints <- visibleReferencePoints
@@ -98,7 +85,7 @@ nlFitRun <- function(targets, estimates, upperBound, lowerBound, visibleReferenc
 		outList <- outputNLfitStats(df.tmp, statList, dataTargetCol = "targets", dataEstimateCol = "estimates", pars.n = pars.n, loops = loops, sinkFilename =  sinkFileName, appendSinkFile = TRUE, plotFileName = plotFileName, xlim = xLim, ylim = yLim)
 					
 
-		df.out <- data.frame(firstEstimate = outList$runStats$parameters$firstEstimate, accuracyPercent = outList$runStats$parameters$accuracyPercent, numberSensitivity = outList$runStats$parameters$numberSensitivity, pIncludeConceptualPoints = outList$runStats$parameters$pIncludeConceptualPoints, rangeLength = outList$runStats$parameters$rangeLength, memoryLength = outList$runStats$parameters$memoryLength, r2 = outList$runStats$fitStats$r2, BIC = outList$runStats$fitStats$BIC)
+		df.out <- data.frame(firstEstimate = outList$runStats$parameters$firstEstimate, accuracyPercent = outList$runStats$parameters$accuracyPercent, numberSensitivity = outList$runStats$parameters$numberSensitivity, pConceptual = outList$runStats$parameters$pConceptual, memoryLength = outList$runStats$parameters$memoryLength, r2 = outList$runStats$fitStats$r2, BIC = outList$runStats$fitStats$BIC)
 		
 		returnList = list(data = outList$df.fitted, fit = df.out)
 		return(returnList)

@@ -1,245 +1,245 @@
-SN	AMAS_Comp	Bio_Sex	Gender	Age	Race
-1	27	Female	Female	19	Other
-2	28	Female	Female	20	White
-3	33	Female	Female	22	Latin American
-4	28	Female	Female	18	White
-5	33	Female	Female	18	White
-6	27	Female	Female	18	White
-7	17	Female	Female	21	White
-8	29	Male	Male	19	White
-9	15	Male	Male	18	White
-10	27	Female	Female	20	East Asian
-11	30	Female	Female	20	White,Indigenous American
-12	26	Female	Female	21	Other
-13	30	Female	Female	21	White
-14	31	Female	Female	22	White
-15	32	Female	Female	19	White
-16	26	Female	Female	18	White
-17	13	Female	Female	20	South Asian
-18	12	Male	Male	18	East Asian
-19	31	Female	Female	19	White
-20	32	Female	Female	18	White
-21	41	Female	Female	21	White
-22	28	Female	Female	19	White
-23	36	Female	Female	19	White
-24	25	Male	Female	20	White
-25	26	Female	Female	19	White
-26	16	Male	Female	20	White
-27	23	Female	Female	21	African American
-28	27	Female	Female	NA	White
-29	27	Male	Male	NA	White
-30	31	Female	Female	19	White
-31	32	Female	Female	19	White
-32	19	Female	Female	19	White
-33	25	Female	Female	19	White
-34	16	Female	Female	19	White
-35	34	Female	Female	20	African American,White
-36	18	Male	Male	20	White
-37	13	Male	Male	19	White
-38	20	Male	Male	20	White
-39	17	Male	Male	19	White
-40	22	Female	Female	49	White
-41	27	Female	Female	18	White
-42	35	Female	Female	23	African
-43	38	Male	Male	18	African American
-44	9	Male	Male	18	African American
-45	23	Male	Male	19	White
-46	26	Female	Female	21	White
-47	24	Female	Female	21	White
-48	20	Female	Female	20	African American,White
-49	43	Female	Female	20	White
-50	31	Female	Female	19	White
-51	16	Female	Nonbinary	26	White
-52	24	Female	Female	19	White
-53	12	Male	Male	19	White
-54	39	Female	Female	21	White
-55	12	Male	Male	19	White
-56	41	Female	Female	21	White
-57	13	Female	Female	18	White
-58	27	Male	Male	18	African American,Latin American
-59	29	Female	Female	18	White
-60	28	Male	Male	18	African American
-61	30	Female	Female	19	African American
-62	31	Female	Female	19	African American
-63	28	Female	Female	22	White
-64	31	Female	Female	19	African American
-65	27	Male	Male	19	White
-66	24	Female	Female	19	African American
-67	25	Female	Female	19	Latin American
-68	24	Female	Female	21	White
-69	26	Female	Female	19	White
-70	11	Male	Male	21	White
-71	26	Male	Male	20	White,Latin American
-72	35	Female	Female	19	White
-73	32	Female	Female	19	White
-74	29	Male	Male	21	White
-75	18	Female	Nonbinary	22	White
-76	30	Female	Female	18	White
-77	13	Male	Male	18	White
-78	21	Female	Female	21	White
-79	29	Male	Male	19	White
-80	20	Female	Female	18	South Asian
-81	35	Female	Female	18	White
-82	31	Female	Female	20	White
-83	31	Female	Female	19	White
-84	24	Female	Female	22	White
-85	27	Female	Female	19	African American,White
-86	23	Male	Male	20	African American,African
-87	39	Female	Female	18	African American
-88	27	Male	Male	20	African American,African
-89	23	Female	Female	20	White
-90	32	Female	Female	18	White
-91	29	Female	Female	19	White,Indigenous American
-92	23	Female	Female	18	White
-93	28	Female	Female	19	White
-94	23	Male	Male	19	White
-95	25	Female	Female	20	African American,African
-96	31	Female	Female	21	White
-97	32	Female	Female	22	White
-98	18	Male	Male	18	African American
-99	32	Female	Female	18	White
-100	36	Female	Female	19	White,Latin American
-101	27	Female	Female	19	White
-102	36	Female	Female	20	White
-103	29	Female	Female	19	White
-104	31	Male	Male	19	White
-105	39	Female	Female	20	White
-106	23	Female	Female	22	White
-107	17	Female	Female	43	African American
-108	44	Male	Male	20	White
-109	35	Female	Female	20	White
-110	23	Male	Male	19	African American
-111	22	Male	Male	19	African American
-112	31	Female	Female	22	White
-113	20	Female	Female	21	White
-114	28	Female	Female	20	White
-115	26	Female	Female	20	White
-116	39	Female	Female	18	White
-117	29	Female	Female	20	White
-118	40	Female	Female	18	White
-119	13	Male	Male	19	White
-120	19	Female	Female	19	White
-121	31	Female	Female	20	White
-122	25	Female	Female	19	White
-123	25	Female	Female	20	White
-124	22	Female	Female	19	White
-125	27	Male	Male	22	White
-126	37	Female	Nonbinary	23	White
-127	29	Male	Male	21	White
-128	19	Female	Female	20	White
-129	13	Female	Female	18	White
-130	15	Female	Female	21	White
-131	23	Female	Female	19	White
-132	18	Female	Female	19	White
-133	31	Female	Female	25	White
-134	32	Female	Female	20	White
-135	27	Female	Female	19	White
-136	26	Female	Female	19	White
-137	19	Female	Female	19	African American
-138	21	Female	Female	18	White
-139	35	Male	Male	18	White
-140	30	Male	Male	19	African
-141	27	Male	Male	19	White,East Asian
-142	42	Female	Female	20	Latin American
-143	16	Male	Male	21	White
-144	30	Male	Male	18	White
-145	19	Female	Female	19	White
-146	14	Female	Female	45	South Asian
-147	25	Female	Female	19	White
-148	29	Male	Male	19	African American
-149	32	Male	Male	19	African American
-150	32	Female	Female	19	African American
-151	28	Female	Female	19	White
-152	23	Female	Female	18	White
-153	26	Female	Female	21	White
-154	31	Male	Male	19	White
-155	24	Female	Female	19	White
-156	23	Male	Male	NA	Other
-157	25	Female	Female	19	White
-158	32	Female	Female	20	White
-159	18	Female	Female	19	African American,White
-160	22	Male	Male	20	White
-161	27	Male	Male	18	White
-162	27	Female	Female	18	White
-163	17	Female	Female	19	White
-164	18	Female	Female	18	White
-165	37	Female	Female	20	African American
-166	43	Female	Female	20	African American
-167	23	Female	Female	19	White
-168	34	Female	Female	19	South Asian
-169	39	Female	Female	21	MENA
-170	34	Female	Female	19	White
-171	25	Female	Female	20	White
-172	25	Female	Female	19	White
-173	22	Female	Female	20	White
-174	15	Male	Male	19	White
-175	31	Female	Other	19	White
-176	27	Male	Male	22	White
-177	40	Female	Female	20	White
-178	18	Male	Male	22	African American
-179	25	Female	Female	19	African American
-180	31	Female	Prefer not to say	19	White
-181	34	Female	Female	21	White,Latin American
-182	37	Female	Female	26	White
-183	24	Male	Male	22	White
-184	36	Female	Female	21	Latin American
-185	30	Female	Female	18	White
-186	23	Female	Female	20	White
-187	23	Female	Female	19	White,East Asian
-188	21	Female	Female	19	African American,White
-189	41	Female	Female	19	White
-190	14	Male	Male	21	White
-191	34	Female	Female	19	White
-192	22	Female	Female	22	White
-193	39	Female	Female	20	White
-194	25	Male	Male	19	MENA
-195	25	Female	Female	18	White
-196	23	Female	Female	21	White
-197	31	Female	Female	19	White
-198	22	Female	Female	20	East Asian,South Asian
-199	31	Female	Female	19	African American
-200	26	Female	Female	18	African American
-201	30	Female	Female	22	White
-202	25	Female	Female	19	White
-203	26	Female	Female	19	White
-204	26	Female	Female	20	African American
-205	24	Female	Female	19	White
-206	33	Female	Female	21	White
-207	30	Female	Female	21	White
-208	34	Female	Female	18	White
-209	27	Male	Male	19	White
-210	36	Male	Male	18	South Asian
-211	14	Male	Male	18	White
-212	36	Male	Male	22	White
-213	36	Male	Male	22	White
-214	28	Female	Female	19	African American
-215	27	Female	Female	19	White
-216	30	Female	Female	20	White,South Asian
-217	32	Female	Female	19	White
-218	33	Male	Male	19	White
-219	40	Female	Female	19	White
-220	28	Male	Male	19	White
-221	21	Male	Male	19	White
-222	25	Female	Female	19	White
-223	42	Female	Female	19	White
-224	23	Male	Male	21	White
-225	20	Male	Male	18	White
-226	37	Female	Female	21	Latin American
-227	23	Male	Male	20	White
-228	25	Male	Male	19	White
-229	24	Male	Male	21	White
-230	32	Female	Female	20	White
-231	32	Female	Female	19	White,Other
-232	41	Female	Female	24	White
-233	32	Female	Female	20	White
-234	29	Female	Female	20	White
-235	30	Female	Female	22	White,Other
-236	33	Male	Male	19	White
-237	31	Male	Male	19	White
-238	16	Male	Male	19	African American
-239	34	Female	Female	20	White
-240	31	Female	Female	19	African American
-241	34	Female	Female	22	African American
-242	17	Female	Female	20	White
-243	36	Female	Female	21	White
-244	35	Female	Female	19	White
+SN	AMAS_Comp	Bio_Sex	Gender	Age	Race	AMAS_1	AMAS_2	AMAS_3	AMAS_4	AMAS_5	AMAS_6	AMAS_7	AMAS_8	AMAS_9
+1	27	Female	Female	19	Other	3	3	3	3	3	3	3	3	3
+2	28	Female	Female	20	White	2	4	2	4	5	3	3	3	2
+3	33	Female	Female	22	Latin American	3	5	2	5	4	3	3	5	3
+4	28	Female	Female	18	White	2	3	3	3	4	3	3	4	3
+5	33	Female	Female	18	White	3	5	3	5	4	3	3	5	2
+6	27	Female	Female	18	White	3	3	3	3	3	3	3	3	3
+7	17	Female	Female	21	White	1	4	1	2	1	1	1	5	1
+8	29	Male	Male	19	White	3	5	2	5	3	2	3	4	2
+9	15	Male	Male	18	White	1	2	1	3	2	1	1	3	1
+10	27	Female	Female	20	East Asian	1	3	2	3	5	2	2	5	4
+11	30	Female	Female	20	White,Indigenous American	3	4	2	4	5	2	2	5	3
+12	26	Female	Female	21	Other	2	5	3	5	5	2	1	2	1
+13	30	Female	Female	21	White	1	4	4	5	3	2	3	4	4
+14	31	Female	Female	22	White	1	4	3	5	5	3	2	5	3
+15	32	Female	Female	19	White	1	5	3	5	5	2	2	5	4
+16	26	Female	Female	18	White	3	4	3	3	5	2	2	3	1
+17	13	Female	Female	20	South Asian	1	1	1	2	2	1	1	3	1
+18	12	Male	Male	18	East Asian	1	2	1	1	2	1	1	2	1
+19	31	Female	Female	19	White	2	4	3	4	4	3	3	5	3
+20	32	Female	Female	18	White	4	4	4	5	3	2	2	5	3
+21	41	Female	Female	21	White	3	4	5	5	5	5	4	5	5
+22	28	Female	Female	19	White	1	4	2	5	4	4	2	3	3
+23	36	Female	Female	19	White	4	5	5	5	3	3	2	5	4
+24	25	Male	Female	20	White	1	4	2	3	5	2	1	5	2
+25	26	Female	Female	19	White	3	4	1	5	3	2	2	5	1
+26	16	Male	Female	20	White	2	2	1	2	2	1	1	3	2
+27	23	Female	Female	21	African American	1	3	1	4	5	1	1	4	3
+28	27	Female	Female	NA	White	2	4	2	4	4	3	2	4	2
+29	27	Male	Male	NA	White	1	4	2	4	3	4	2	5	2
+30	31	Female	Female	19	White	3	4	3	4	4	3	3	4	3
+31	32	Female	Female	19	White	4	3	3	4	3	4	4	3	4
+32	19	Female	Female	19	White	1	3	1	3	4	1	1	4	1
+33	25	Female	Female	19	White	2	5	2	4	4	1	2	4	1
+34	16	Female	Female	19	White	1	2	1	2	4	1	1	3	1
+35	34	Female	Female	20	African American,White	2	5	5	5	5	2	2	5	3
+36	18	Male	Male	20	White	1	3	1	3	3	1	1	4	1
+37	13	Male	Male	19	White	1	2	1	2	2	1	1	2	1
+38	20	Male	Male	20	White	1	3	2	4	3	1	1	3	2
+39	17	Male	Male	19	White	1	3	1	2	2	1	1	4	2
+40	22	Female	Female	49	White	2	2	2	2	3	2	3	4	2
+41	27	Female	Female	18	White	2	5	2	5	3	2	1	5	2
+42	35	Female	Female	23	African	5	4	4	4	4	3	3	4	4
+43	38	Male	Male	18	African American	5	5	2	5	5	1	5	5	5
+44	9	Male	Male	18	African American	1	1	1	1	1	1	1	1	1
+45	23	Male	Male	19	White	2	3	2	3	4	2	2	3	2
+46	26	Female	Female	21	White	2	4	2	4	3	3	3	3	2
+47	24	Female	Female	21	White	2	4	2	3	3	2	2	4	2
+48	20	Female	Female	20	African American,White	2	3	2	3	2	2	2	3	1
+49	43	Female	Female	20	White	5	5	5	5	5	4	4	5	5
+50	31	Female	Female	19	White	1	5	1	5	5	3	3	5	3
+51	16	Female	Nonbinary	26	White	1	2	1	2	3	1	2	3	1
+52	24	Female	Female	19	White	1	3	1	4	4	2	2	5	2
+53	12	Male	Male	19	White	1	2	1	2	1	1	1	2	1
+54	39	Female	Female	21	White	3	5	5	5	4	4	4	5	4
+55	12	Male	Male	19	White	1	2	1	2	1	1	1	2	1
+56	41	Female	Female	21	White	4	5	5	5	5	4	4	5	4
+57	13	Female	Female	18	White	2	4	1	1	1	1	1	1	1
+58	27	Male	Male	18	African American,Latin American	3	3	3	3	3	3	3	3	3
+59	29	Female	Female	18	White	2	5	1	5	5	1	3	5	2
+60	28	Male	Male	18	African American	3	4	3	5	3	4	1	3	2
+61	30	Female	Female	19	African American	3	4	4	4	3	3	4	4	1
+62	31	Female	Female	19	African American	4	4	4	5	3	3	4	3	1
+63	28	Female	Female	22	White	2	4	3	4	3	3	3	4	2
+64	31	Female	Female	19	African American	4	4	4	5	3	3	3	4	1
+65	27	Male	Male	19	White	3	4	2	4	3	2	2	5	2
+66	24	Female	Female	19	African American	1	4	1	5	5	1	2	4	1
+67	25	Female	Female	19	Latin American	3	5	1	4	3	1	1	5	2
+68	24	Female	Female	21	White	1	4	2	4	4	2	2	3	2
+69	26	Female	Female	19	White	3	4	2	4	4	2	2	3	2
+70	11	Male	Male	21	White	2	2	1	1	1	1	1	1	1
+71	26	Male	Male	20	White,Latin American	1	4	2	3	4	3	2	4	3
+72	35	Female	Female	19	White	2	5	3	5	4	4	4	5	3
+73	32	Female	Female	19	White	3	5	4	5	3	2	3	5	2
+74	29	Male	Male	21	White	3	4	2	5	4	2	1	5	3
+75	18	Female	Nonbinary	22	White	2	1	1	3	3	1	1	5	1
+76	30	Female	Female	18	White	2	4	2	3	5	3	4	5	2
+77	13	Male	Male	18	White	1	1	1	1	3	1	1	3	1
+78	21	Female	Female	21	White	1	3	1	4	3	2	1	5	1
+79	29	Male	Male	19	White	2	5	3	5	3	3	1	5	2
+80	20	Female	Female	18	South Asian	1	4	1	4	3	1	1	4	1
+81	35	Female	Female	18	White	5	5	3	5	4	2	3	5	3
+82	31	Female	Female	20	White	2	5	2	5	5	3	1	5	3
+83	31	Female	Female	19	White	4	4	4	3	4	4	4	2	2
+84	24	Female	Female	22	White	3	2	2	2	3	3	3	3	3
+85	27	Female	Female	19	African American,White	2	4	1	5	4	1	2	5	3
+86	23	Male	Male	20	African American,African	3	3	2	2	3	2	2	3	3
+87	39	Female	Female	18	African American	4	5	3	5	5	5	3	5	4
+88	27	Male	Male	20	African American,African	3	4	2	4	3	3	2	3	3
+89	23	Female	Female	20	White	2	3	2	4	4	1	2	4	1
+90	32	Female	Female	18	White	1	4	2	5	5	3	3	5	4
+91	29	Female	Female	19	White,Indigenous American	3	5	2	5	5	1	2	5	1
+92	23	Female	Female	18	White	2	5	1	4	3	2	1	4	1
+93	28	Female	Female	19	White	1	4	3	4	5	2	2	5	2
+94	23	Male	Male	19	White	2	3	3	2	3	3	3	2	2
+95	25	Female	Female	20	African American,African	2	3	2	4	2	5	2	2	3
+96	31	Female	Female	21	White	2	4	4	3	3	4	3	4	4
+97	32	Female	Female	22	White	1	4	3	5	5	3	3	5	3
+98	18	Male	Male	18	African American	1	3	2	3	3	1	1	3	1
+99	32	Female	Female	18	White	2	5	2	5	4	3	3	5	3
+100	36	Female	Female	19	White,Latin American	3	5	5	5	5	2	3	5	3
+101	27	Female	Female	19	White	2	3	2	4	3	5	4	2	2
+102	36	Female	Female	20	White	3	4	4	5	4	4	4	5	3
+103	29	Female	Female	19	White	5	5	1	4	5	1	1	5	2
+104	31	Male	Male	19	White	2	5	3	4	4	3	3	4	3
+105	39	Female	Female	20	White	4	5	3	5	5	4	5	5	3
+106	23	Female	Female	22	White	2	3	2	3	2	2	3	4	2
+107	17	Female	Female	43	African American	1	3	2	3	1	1	2	2	2
+108	44	Male	Male	20	White	4	5	5	5	5	5	5	5	5
+109	35	Female	Female	20	White	3	5	2	5	5	3	3	5	4
+110	23	Male	Male	19	African American	2	3	2	3	3	2	2	4	2
+111	22	Male	Male	19	African American	2	3	2	3	2	2	2	4	2
+112	31	Female	Female	22	White	3	4	3	4	4	2	3	4	4
+113	20	Female	Female	21	White	2	2	2	3	3	1	1	3	3
+114	28	Female	Female	20	White	3	4	3	3	3	2	3	4	3
+115	26	Female	Female	20	White	3	2	3	4	3	2	3	3	3
+116	39	Female	Female	18	White	4	5	3	5	5	4	4	5	4
+117	29	Female	Female	20	White	3	4	2	4	4	2	3	5	2
+118	40	Female	Female	18	White	4	5	4	5	5	4	4	5	4
+119	13	Male	Male	19	White	2	1	1	2	1	1	1	3	1
+120	19	Female	Female	19	White	1	3	1	4	3	1	1	4	1
+121	31	Female	Female	20	White	3	4	3	3	4	3	3	5	3
+122	25	Female	Female	19	White	2	2	2	4	4	2	3	4	2
+123	25	Female	Female	20	White	2	4	1	5	3	2	3	4	1
+124	22	Female	Female	19	White	2	4	2	4	4	1	1	3	1
+125	27	Male	Male	22	White	3	3	3	3	3	3	3	3	3
+126	37	Female	Nonbinary	23	White	2	5	3	5	5	4	5	5	3
+127	29	Male	Male	21	White	3	5	3	4	4	2	2	4	2
+128	19	Female	Female	20	White	1	3	2	4	1	1	1	4	2
+129	13	Female	Female	18	White	1	2	1	2	2	1	1	2	1
+130	15	Female	Female	21	White	1	1	1	4	1	1	1	4	1
+131	23	Female	Female	19	White	1	4	2	2	4	2	2	4	2
+132	18	Female	Female	19	White	2	2	2	2	2	2	2	2	2
+133	31	Female	Female	25	White	4	4	2	4	4	2	3	5	3
+134	32	Female	Female	20	White	2	4	3	4	4	3	4	4	4
+135	27	Female	Female	19	White	2	4	3	4	4	2	1	5	2
+136	26	Female	Female	19	White	2	4	3	4	3	2	1	5	2
+137	19	Female	Female	19	African American	1	5	2	1	1	1	1	4	3
+138	21	Female	Female	18	White	2	2	2	3	4	1	1	4	2
+139	35	Male	Male	18	White	3	5	3	4	4	4	5	4	3
+140	30	Male	Male	19	African	2	5	2	5	5	2	3	5	1
+141	27	Male	Male	19	White,East Asian	3	5	1	2	5	2	1	5	3
+142	42	Female	Female	20	Latin American	5	5	5	5	4	5	3	5	5
+143	16	Male	Male	21	White	2	2	1	2	3	1	1	3	1
+144	30	Male	Male	18	White	3	4	2	5	3	2	2	4	5
+145	19	Female	Female	19	White	3	2	2	2	2	2	2	2	2
+146	14	Female	Female	45	South Asian	2	2	1	2	2	1	1	2	1
+147	25	Female	Female	19	White	2	2	2	3	4	3	2	3	4
+148	29	Male	Male	19	African American	3	4	2	4	4	2	2	5	3
+149	32	Male	Male	19	African American	5	4	2	5	4	2	2	5	3
+150	32	Female	Female	19	African American	3	5	3	4	5	2	1	5	4
+151	28	Female	Female	19	White	3	3	3	3	3	3	3	3	4
+152	23	Female	Female	18	White	2	3	2	2	3	2	3	4	2
+153	26	Female	Female	21	White	1	4	2	4	4	2	2	4	3
+154	31	Male	Male	19	White	1	5	2	5	5	2	1	5	5
+155	24	Female	Female	19	White	2	3	2	3	4	2	2	4	2
+156	23	Male	Male	NA	Other	2	4	1	4	4	1	2	3	2
+157	25	Female	Female	19	White	2	3	2	4	4	2	2	4	2
+158	32	Female	Female	20	White	3	5	2	5	3	2	3	5	4
+159	18	Female	Female	19	African American,White	1	2	1	3	3	1	1	4	2
+160	22	Male	Male	20	White	2	3	1	3	4	2	1	4	2
+161	27	Male	Male	18	White	1	4	1	5	4	1	3	5	3
+162	27	Female	Female	18	White	3	3	3	3	3	3	3	3	3
+163	17	Female	Female	19	White	2	2	2	3	2	1	1	3	1
+164	18	Female	Female	18	White	2	2	2	2	2	2	2	2	2
+165	37	Female	Female	20	African American	3	5	3	5	5	4	3	5	4
+166	43	Female	Female	20	African American	5	5	5	4	4	5	5	5	5
+167	23	Female	Female	19	White	3	4	2	3	2	2	2	3	2
+168	34	Female	Female	19	South Asian	3	4	4	5	4	3	3	5	3
+169	39	Female	Female	21	MENA	1	5	5	5	5	5	4	5	4
+170	34	Female	Female	19	White	2	5	3	5	4	3	3	5	4
+171	25	Female	Female	20	White	2	4	1	4	3	2	2	5	2
+172	25	Female	Female	19	White	1	5	2	3	4	2	1	5	2
+173	22	Female	Female	20	White	1	3	1	3	4	1	3	5	1
+174	15	Male	Male	19	White	1	3	1	3	2	1	1	2	1
+175	31	Female	Other	19	White	3	4	2	3	4	2	4	5	4
+176	27	Male	Male	22	White	2	4	1	5	5	2	2	5	1
+177	40	Female	Female	20	White	3	5	4	5	5	5	5	5	3
+178	18	Male	Male	22	African American	2	2	2	2	2	2	2	2	2
+179	25	Female	Female	19	African American	3	4	1	4	3	1	2	5	2
+180	31	Female	Prefer not to say	19	White	2	4	2	4	5	2	3	5	4
+181	34	Female	Female	21	White,Latin American	1	5	3	5	5	3	4	5	3
+182	37	Female	Female	26	White	3	5	3	5	5	3	4	5	4
+183	24	Male	Male	22	White	1	3	3	5	3	1	2	4	2
+184	36	Female	Female	21	Latin American	4	4	2	5	5	3	4	5	4
+185	30	Female	Female	18	White	3	4	3	4	5	2	3	5	1
+186	23	Female	Female	20	White	3	5	1	3	3	1	1	5	1
+187	23	Female	Female	19	White,East Asian	2	4	1	4	3	1	1	5	2
+188	21	Female	Female	19	African American,White	2	4	2	4	4	1	1	2	1
+189	41	Female	Female	19	White	4	5	5	5	5	4	5	5	3
+190	14	Male	Male	21	White	1	2	1	2	1	1	2	3	1
+191	34	Female	Female	19	White	3	5	4	5	5	3	3	5	1
+192	22	Female	Female	22	White	2	2	2	3	3	2	1	5	2
+193	39	Female	Female	20	White	4	4	5	5	5	4	4	5	3
+194	25	Male	Male	19	MENA	2	3	2	3	4	2	2	4	3
+195	25	Female	Female	18	White	1	5	1	5	3	1	2	4	3
+196	23	Female	Female	21	White	1	4	2	4	3	1	1	4	3
+197	31	Female	Female	19	White	3	3	2	4	4	3	4	5	3
+198	22	Female	Female	20	East Asian,South Asian	2	2	1	3	3	2	2	4	3
+199	31	Female	Female	19	African American	2	4	3	5	4	2	2	5	4
+200	26	Female	Female	18	African American	1	2	2	5	3	4	3	2	4
+201	30	Female	Female	22	White	1	3	4	5	4	2	5	4	2
+202	25	Female	Female	19	White	2	4	2	3	2	2	2	5	3
+203	26	Female	Female	19	White	2	4	2	4	3	3	2	4	2
+204	26	Female	Female	20	African American	1	4	3	5	3	2	2	3	3
+205	24	Female	Female	19	White	1	4	2	4	5	1	2	4	1
+206	33	Female	Female	21	White	3	5	4	5	2	2	3	5	4
+207	30	Female	Female	21	White	2	4	2	4	5	4	2	5	2
+208	34	Female	Female	18	White	2	5	4	5	5	3	2	5	3
+209	27	Male	Male	19	White	3	4	2	4	4	1	1	5	3
+210	36	Male	Male	18	South Asian	3	5	5	5	4	3	4	5	2
+211	14	Male	Male	18	White	1	2	2	2	2	1	1	2	1
+212	36	Male	Male	22	White	4	5	3	4	4	4	4	5	3
+213	36	Male	Male	22	White	4	4	4	4	4	4	4	4	4
+214	28	Female	Female	19	African American	2	4	2	5	3	2	2	4	4
+215	27	Female	Female	19	White	2	4	3	4	5	1	1	4	3
+216	30	Female	Female	20	White,South Asian	2	5	3	5	5	2	2	5	1
+217	32	Female	Female	19	White	3	3	2	5	4	3	4	5	3
+218	33	Male	Male	19	White	3	3	3	5	4	3	3	5	4
+219	40	Female	Female	19	White	4	5	5	5	5	3	4	5	4
+220	28	Male	Male	19	White	3	2	4	2	3	5	2	4	3
+221	21	Male	Male	19	White	2	3	2	1	4	2	1	3	3
+222	25	Female	Female	19	White	3	4	2	3	4	2	2	3	2
+223	42	Female	Female	19	White	4	5	4	5	5	5	4	5	5
+224	23	Male	Male	21	White	1	3	2	4	4	1	2	5	1
+225	20	Male	Male	18	White	1	2	2	3	3	2	1	4	2
+226	37	Female	Female	21	Latin American	3	5	4	5	4	4	4	5	3
+227	23	Male	Male	20	White	3	3	1	4	4	1	1	4	2
+228	25	Male	Male	19	White	1	4	2	5	3	1	2	5	2
+229	24	Male	Male	21	White	2	3	2	3	4	2	2	4	2
+230	32	Female	Female	20	White	2	5	3	5	5	2	2	5	3
+231	32	Female	Female	19	White,Other	3	5	3	5	4	2	2	5	3
+232	41	Female	Female	24	White	2	5	5	5	5	4	5	5	5
+233	32	Female	Female	20	White	1	4	4	5	3	3	4	5	3
+234	29	Female	Female	20	White	1	2	3	4	3	4	3	5	4
+235	30	Female	Female	22	White,Other	1	5	3	5	5	1	2	3	5
+236	33	Male	Male	19	White	2	4	4	5	4	3	3	5	3
+237	31	Male	Male	19	White	2	5	3	4	4	3	2	5	3
+238	16	Male	Male	19	African American	1	3	2	2	3	1	1	2	1
+239	34	Female	Female	20	White	4	4	4	4	4	2	3	5	4
+240	31	Female	Female	19	African American	4	3	2	4	5	4	3	3	3
+241	34	Female	Female	22	African American	4	5	5	5	3	3	3	3	3
+242	17	Female	Female	20	White	2	2	1	2	3	1	1	4	1
+243	36	Female	Female	21	White	4	4	4	4	4	4	4	4	4
+244	35	Female	Female	19	White	3	5	2	5	5	3	3	5	4

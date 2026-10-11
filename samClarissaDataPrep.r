@@ -2,17 +2,31 @@ library(tidyr)
 library(readxl)
 library(dplyr)
 
+###### functions
+#count the responses a threshold flags, in one nlType or in all of them
+countFlagged <- function(df.in, df.flagged, estimateCol, step, nlType, removed) {
+	if(nlType != "all") {
+		df.in <- df.in[df.in$nlType == nlType, ]
+		df.flagged <- df.flagged[df.flagged$nlType == nlType, ]
+	}
+	nTotal <- sum(!is.na(df.in[[estimateCol]]))
+	nFlagged <- sum(!is.na(df.flagged[[estimateCol]]))
+	df.out <- data.frame(step = step, nlType = nlType, nFlagged = nFlagged, nTotal = nTotal, pctFlagged = round(100*nFlagged/nTotal, 2), removed = removed)
+	return(df.out)
+}
+
+############# end
+
 boundPxSize <- 350
 bufferPxSize <- 75
-zOutlierThresh <- 3
 madOutlierThresh <- 7.5
 probTargetThresh <- 1.25
 
-makeAllDataPositive <- FALSE
-scaleValue <- 10
+xLim <- c(-3.5, 3.5)
+yLim <- xLim
 
 mainDirPath <- getwd()
-df.in <- read_excel(filenameRawDataExl)
+df.in <- read_excel(file.path(rawDataDir, filenameRawDataExl), na = c("", "NA"))
 
 ### fix inconsistent column naming between datasets
 if ("AMAS_comp" %in% colnames(df.in)) {
@@ -25,21 +39,27 @@ if ("bUNL7_n" %in% colnames(df.in)) {
   colnames(df.in)[which(names(df.in) == "bUNL7_n")] <- "bUNL7_est"
 }
 
+#the composite must be the sum of the items it is built from
+if(!isTRUE(all.equal(as.numeric(df.in$AMAS_Comp), as.numeric(rowSums(df.in[, amasItems]))))) {
+	stop("AMAS_Comp does not equal the sum of the AMAS items")
+}
+
 df.demo <- df.in[, c("SN", demoCols)]
-write.table(df.demo, file=demoFilename, quote=F, sep = "\t", row.names=F)
+#the demographics are the same in both outlier sets, so save them once
+write.table(df.demo, file=file.path(rawDataDir, demoFilename), quote=F, sep = "\t", row.names=F)
 
 df.in <- df.in[, !names(df.in) %in% demoCols]
 
-# Reshape the data from wide to long format
+#reshape from wide to long: condition, trial and DV come from the column names
 df.long.1 <- df.in %>%
   pivot_longer(
-    cols = -c(SN), # Exclude SN columns from pivoting
-    names_to = c("condition", "trial", "DV"), # New columns to create from parts of the old column names
-    names_pattern = "([A-Za-z]+)(\\d+)_(.*)", # Regular expression to capture parts
-    values_to = "value" # Name of the column to store the values
+    cols = -c(SN),
+    names_to = c("condition", "trial", "DV"),
+    names_pattern = "([A-Za-z]+)(\\d+)_(.*)",
+    values_to = "value"
   )
 
-# spread the DVs into their own columns (ub, lb, targ, est)
+#spread the DVs into their own columns (ub, lb, targ, est)
 df.long <- df.long.1 %>%
   pivot_wider(
     names_from = DV,
@@ -57,51 +77,50 @@ df.long$minBound <- df.long$lb - 2*df.long$halfBoundRange
 df.long$unitsPerPixel <- (2*df.long$halfBoundRange)/boundPxSize
 df.long$bufferUnits <- df.long$unitsPerPixel * bufferPxSize
 
-df.long$halfBoundRange <- (df.long$ub - df.long$lb)/2
 df.long$s_ub <- (df.long$ub - df.long$halfBoundRange - df.long$lb)/df.long$halfBoundRange
 df.long$s_lb <- (df.long$lb - df.long$halfBoundRange - df.long$lb)/df.long$halfBoundRange
 df.long$s_targ <- (df.long$targ - df.long$halfBoundRange - df.long$lb)/df.long$halfBoundRange
 df.long$s_est <- (df.long$est - df.long$halfBoundRange - df.long$lb)/df.long$halfBoundRange
-#### we add the bufferUnits to the target region to capture the 75 pixels on either side
+#the buffer adds the 75 pixels on either side of the target region
 df.long$s_maxBound <- (df.long$maxBound - df.long$halfBoundRange - df.long$lb + df.long$bufferUnits)/df.long$halfBoundRange
 df.long$s_minBound <- (df.long$minBound - df.long$halfBoundRange - df.long$lb - df.long$bufferUnits)/df.long$halfBoundRange
 ###### end same scale
 
-##### now change the s_maxBound and s_minBound to be correct for the bounded number line
+#the bounded number line allows responses only between its labels
 df.long$s_maxBound <- ifelse(df.long$nlType == "bounded", df.long$s_ub, df.long$s_maxBound)
 df.long$s_minBound <- ifelse(df.long$nlType == "bounded", df.long$s_lb, df.long$s_minBound)
 
-if(makeAllDataPositive) {
-		shift <- abs(min(df.long$s_minBound))
-		df.long$s_targ <- (df.long$s_targ + shift) * scaleValue
-		df.long$s_est <- (df.long$s_est + shift) * scaleValue
-		df.long$s_ub <- (df.long$s_ub + shift) * scaleValue
-		df.long$s_lb <- (df.long$s_lb + shift) * scaleValue
-		df.long$s_minBound <- (df.long$s_minBound + shift) * scaleValue
-		df.long$s_maxBound <- (df.long$s_maxBound + shift) * scaleValue
-		xLim <- c(min(df.long$s_minBound), max(df.long$s_maxBound))
-		yLim <- xLim
-} else {
-	xLim <- c(-3.5, 3.5)
-	yLim <- xLim
-}
-
-#### Filter outliers - 
-#first identify and remove problem targets 
+#### filter outliers
+#first identify and remove problem targets
 df.long <- df.long %>% group_by(nlType, SN) %>% mutate(z_diff = scale(s_targ - s_est))
 df.zDiff <- df.long %>% group_by(targ) %>% summarize(meanZdiff = mean(z_diff, na.rm = T))
 problemTargets <- df.zDiff[abs(df.zDiff$meanZdiff) > probTargetThresh, ]
-df.long.rmProblemTargets <- df.long[!(df.long$targ %in% problemTargets$targ), ]
 df.long.problemTargets <- df.long[df.long$targ %in% problemTargets$targ, ]
+if(removeOutliers) {
+	df.long.rmProblemTargets <- df.long[!(df.long$targ %in% problemTargets$targ), ]
+} else {
+	df.long.rmProblemTargets <- df.long
+}
 df.long.rmProblemTargets$z_diff <- NULL
 
 #now identify and remove individual outliers
 df.long.rmProblemTargets$diff <- df.long.rmProblemTargets$s_targ - df.long.rmProblemTargets$s_est
-#get the median absolute difference and, for each point, calculate the number of MADs each difference it. 
+#scale each difference by the participant's median absolute difference
 df.long.rmProblemTargets <- df.long.rmProblemTargets %>% group_by(nlType, SN) %>% mutate(median_diff = median(abs(diff), na.rm = T), mad_diff = diff/median_diff)
-#filter by a threshold 
-df.long.rmProblemTargets.filtered <- df.long.rmProblemTargets[abs(df.long.rmProblemTargets$mad_diff) < madOutlierThresh, ]
+#filter by a threshold
 df.long.IndividualOutliers <- df.long.rmProblemTargets[abs(df.long.rmProblemTargets$mad_diff) >= madOutlierThresh, ]
+if(removeOutliers) {
+	df.long.rmProblemTargets.filtered <- df.long.rmProblemTargets[abs(df.long.rmProblemTargets$mad_diff) < madOutlierThresh, ]
+} else {
+	df.long.rmProblemTargets.filtered <- df.long.rmProblemTargets
+}
+
+#tally what each threshold flags, whether or not it is removed
+df.exclusions <- NULL
+for(ty in c(unique(df.long$nlType), "all")) {
+	df.exclusions <- rbind(df.exclusions, countFlagged(df.long, df.long.problemTargets, "s_est", "problemTargets", ty, removeOutliers))
+	df.exclusions <- rbind(df.exclusions, countFlagged(df.long.rmProblemTargets, df.long.IndividualOutliers, "s_est", "individualOutliers", ty, removeOutliers))
+}
 
 pdf("plotsDescribingData.pdf")
 pTargs <- unique(df.long$targ)
@@ -136,4 +155,5 @@ filename <- paste("samClarissaProblemTargets_", fileTag, ".txt", sep = "")
 write.table(problemTargets, file=filename, quote=F, sep = "\t", row.names=F)
 filename <- paste("samClarissaIndividualOutliers_", fileTag, ".txt", sep = "")
 write.table(df.long.IndividualOutliers, file=filename, quote=F, sep = "\t", row.names=F)
-
+filename <- paste("samClarissaExclusions_", fileTag, ".txt", sep = "")
+write.table(df.exclusions, file=filename, quote=F, sep = "\t", row.names=F)

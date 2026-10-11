@@ -1,15 +1,14 @@
 library(nlFit)
 library(chutils)
 library(tidyr)
-source("nlFitRun.r")
+source(nlFitRunScript)
 
 nlFitLoops <- 250
 targetOrder <- "random"
-#Only run new models that have not been run before?
-skipModelsWithExistingDirs <- FALSE
-freepIncludeConceptualPoints <- FALSE
+#skip the fits if their folder already exists
+skipModelsWithExistingDirs <- TRUE
+freepConceptual <- FALSE
 conceptualReferencePoints <- 0
-fileTag <- "Kent"
 
 
 filenamexl <- paste("mielickiProcessedData_", fileTag, ".txt", sep="")
@@ -17,11 +16,12 @@ df.long <- read.table(filenamexl, header = T, sep="\t")
 
 mainDirPath <- getwd()
 
-##### Run analysis on each subject and as a group
-subjects <- unique(df.long$SN)
-subjects <- subjects[!is.na(subjects)]
-types <- unique(df.long$nlType)
-types <- types[!is.na(types)]
+df.long.1 <- df.long[complete.cases(df.long), ]
+
+##### fit each subject and the group
+#a participant with no usable response has nothing to fit
+subjects <- unique(df.long.1$SN)
+types <- unique(df.long.1$nlType)
 subjects <- c(subjects, "all")
 
 yLim <- c(min(df.long$s_minBound, na.rm = T), max(df.long$s_maxBound, na.rm = T))
@@ -32,8 +32,7 @@ keepCols <- c("nlType", "target", "estimate", "s_ub", "s_lb", "s_maxBound", "s_m
 	all.tmp <- NULL
 	data.tmp <- NULL
 	
-	df.long.1 <- df.long[complete.cases(df.long), ]
-	subDirExists <- ch.newDir (mainDirPath, "nlFit")
+	subDirExists <- ch.newDir (mainDirPath, nlFitDirName)
 	ffMilPath <- getwd()
 	outFilename <- "nlGenFitData.txt"
 	dataOutFilename <- "nlGenPlotData.txt"
@@ -60,9 +59,9 @@ keepCols <- c("nlType", "target", "estimate", "s_ub", "s_lb", "s_maxBound", "s_m
 				plotFileName.2 <- file.path(nlFitPlotPath, plotFileName.1)
 				sinkFileName.1 <- paste(sub, typ, "nlFitout.txt", sep="-")
 				sinkFileName.2 <- file.path(nlFitPath, sinkFileName.1)
-				outlist.r <- nlFitRun(df.tmp$target, df.tmp$estimate, upperBound = df.tmp$s_maxBound[1], lowerBound = df.tmp$s_minBound[1], visibleReferencePoints = c(df.tmp$s_lb[1], df.tmp$s_ub[1]), conceptualReferencePoints = conceptualReferencePoints, freepIncludeConceptualPoints = freepIncludeConceptualPoints, targetOrder = targetOrder, plotFileName = plotFileName.2, sinkFileName = sinkFileName.2, loops = nlFitLoops, yLim = yLim, xLim = xLim)
+				outlist.r <- nlFitRun(df.tmp$target, df.tmp$estimate, upperBound = df.tmp$s_maxBound[1], lowerBound = df.tmp$s_minBound[1], visibleReferencePoints = c(df.tmp$s_lb[1], df.tmp$s_ub[1]), conceptualReferencePoints = conceptualReferencePoints, freepConceptual = freepConceptual, targetOrder = targetOrder, plotFileName = plotFileName.2, sinkFileName = sinkFileName.2, loops = nlFitLoops, yLim = yLim, xLim = xLim)
 
-				df.tmp.fit <- data.frame(sn = sub, nlType = typ, nl_firstEstimate_Random =  outlist.r$fit$firstEstimate, nl_accuracyPercent_Random =  outlist.r$fit$accuracyPercent, nl_numberSensitivity_Random =  outlist.r$fit$numberSensitivity, nl_pIncludeConceptualPoints_Random =  outlist.r$fit$pIncludeConceptualPoints, nl_rangeLength_Random =  outlist.r$fit$rangeLength, nl_memoryLength_Random =  outlist.r$fit$memoryLength, nl_r2_Random =  outlist.r$fit$r2,  nl_BIC_Random =  outlist.r$fit$BIC)
+				df.tmp.fit <- data.frame(sn = sub, nlType = typ, nl_firstEstimate_Random =  outlist.r$fit$firstEstimate, nl_accuracyPercent_Random =  outlist.r$fit$accuracyPercent, nl_numberSensitivity_Random =  outlist.r$fit$numberSensitivity, nl_pConceptual_Random =  outlist.r$fit$pConceptual, nl_memoryLength_Random =  outlist.r$fit$memoryLength, nl_r2_Random =  outlist.r$fit$r2,  nl_BIC_Random =  outlist.r$fit$BIC)
 
 				all.tmp <- ch.rbind(all.tmp, df.tmp.fit)
 				
