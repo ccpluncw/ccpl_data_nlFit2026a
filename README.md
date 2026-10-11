@@ -1,6 +1,6 @@
 # ccpl_data_nlFit2026a
 
-Data and analysis code for *Relations Among nlFit Parameters, Gender, and Math Anxiety in Three Samples of U.S. Adults* (Thompson, Cohen, and colleagues; Journal of Experimental Psychology: General, revised submission).
+Data and analysis code for *Relations Among nlFit Parameters, Gender, and Math Anxiety in Three Samples of U.S. Adults* (Thompson, Cohen, and colleagues; Journal of Educational Psychology, revised submission).
 
 ## Layout
 
